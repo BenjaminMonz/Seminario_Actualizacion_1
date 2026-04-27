@@ -1,0 +1,148 @@
+
+BASE_PATH = "price_manager/migrations/csv"
+
+import csv
+import os
+
+def crear_directorio():
+    os.makedirs(BASE_PATH, exist_ok=True)
+
+
+def escribir_csv(nombre_archivo, campos, registros):
+    ruta = os.path.join(BASE_PATH, nombre_archivo)
+
+    with open(ruta, mode="w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=campos)
+        writer.writeheader()
+        writer.writerows(registros)
+
+
+def precargar_datos():
+    crear_directorio()
+
+    escribir_csv(
+        "categorias.csv",
+        ["id", "nombre"],
+        [
+            {"id": 1, "nombre": "Monitores"},
+            {"id": 2, "nombre": "Teclados"},
+            {"id": 3, "nombre": "Mouse"},
+            {"id": 4, "nombre": "Auriculares"},
+            {"id": 5, "nombre": "Notebooks"},
+            {"id": 6, "nombre": "Procesadores"},
+            {"id": 7, "nombre": "Placas de video"},
+            {"id": 8, "nombre": "Memorias RAM"},
+            {"id": 9, "nombre": "Discos SSD"},
+            {"id": 10, "nombre": "Fuentes"},
+        ],
+    )
+
+    escribir_csv(
+        "proveedores.csv",
+        ["id", "nombre", "contacto"],
+        [
+            {"id": 1, "nombre": "TechCorp", "contacto": "ventas@techcorp.com"},
+            {"id": 2, "nombre": "HardPlus", "contacto": "info@hardplus.com"},
+            {"id": 3, "nombre": "CompuMax", "contacto": "contacto@compumax.com"},
+            {"id": 4, "nombre": "DigitalStore", "contacto": "ventas@digitalstore.com"},
+            {"id": 5, "nombre": "PC Mayorista", "contacto": "mayorista@pc.com"},
+            {"id": 6, "nombre": "InsumosNet", "contacto": "info@insumosnet.com"},
+            {"id": 7, "nombre": "TecnoWorld", "contacto": "ventas@tecnoworld.com"},
+            {"id": 8, "nombre": "Hardware SA", "contacto": "contacto@hardware.com"},
+            {"id": 9, "nombre": "ElectroParts", "contacto": "ventas@electroparts.com"},
+            {"id": 10, "nombre": "MegaTech", "contacto": "info@megatech.com"},
+        ],
+    )
+
+    escribir_csv(
+        "monedas.csv",
+        ["id", "nombre"],
+        [
+            {"id": 1, "nombre": "ARS"},
+            {"id": 2, "nombre": "USD"},
+            {"id": 3, "nombre": "EUR"},
+            {"id": 4, "nombre": "BRL"},
+            {"id": 5, "nombre": "CLP"},
+            {"id": 6, "nombre": "UYU"},
+            {"id": 7, "nombre": "GBP"},
+            {"id": 8, "nombre": "JPY"},
+            {"id": 9, "nombre": "CNY"},
+            {"id": 10, "nombre": "MXN"},
+        ],
+    )
+
+    escribir_csv(
+        "tiposCotizacion.csv",
+        ["id", "nombre"],
+        [
+            {"id": 1, "nombre": "Dólar Oficial"},
+            {"id": 2, "nombre": "Dólar Blue"},
+            {"id": 3, "nombre": "Dólar Bolsa"},
+            {"id": 4, "nombre": "Dólar CCL"},
+            {"id": 5, "nombre": "Dólar Tarjeta"},
+            {"id": 6, "nombre": "Dólar Mayorista"},
+            {"id": 7, "nombre": "Dólar Cripto"},
+            {"id": 8, "nombre": "Dólar MEP"},
+            {"id": 9, "nombre": "Dólar Ahorro"},
+            {"id": 10, "nombre": "Dólar Qatar"},
+        ],
+    )
+
+    escribir_csv(
+        "productos.csv",
+        [
+            "id", "nombre", "descripcion",
+            "precio_valor", "moneda_id", "moneda_nombre", "precio_fecha",
+            "categoria_id", "categoria_nombre",
+            "proveedor_id", "proveedor_nombre", "proveedor_contacto",
+        ],
+        [
+            {"id": 1, "nombre": "Monitor 24", "descripcion": "Full HD", "precio_valor": 150000, "moneda_id": 1, "moneda_nombre": "ARS", "precio_fecha": "2026-04-01", "categoria_id": 1, "categoria_nombre": "Monitores", "proveedor_id": 1, "proveedor_nombre": "TechCorp", "proveedor_contacto": "ventas@techcorp.com"},
+            {"id": 2, "nombre": "Teclado Mecánico", "descripcion": "Switch blue", "precio_valor": 85000, "moneda_id": 1, "moneda_nombre": "ARS", "precio_fecha": "2026-04-01", "categoria_id": 2, "categoria_nombre": "Teclados", "proveedor_id": 2, "proveedor_nombre": "HardPlus", "proveedor_contacto": "info@hardplus.com"},
+            {"id": 3, "nombre": "Mouse Gamer", "descripcion": "RGB", "precio_valor": 45000, "moneda_id": 1, "moneda_nombre": "ARS", "precio_fecha": "2026-04-01", "categoria_id": 3, "categoria_nombre": "Mouse", "proveedor_id": 3, "proveedor_nombre": "CompuMax", "proveedor_contacto": "contacto@compumax.com"},
+            {"id": 4, "nombre": "Auricular USB", "descripcion": "Con micrófono", "precio_valor": 60000, "moneda_id": 1, "moneda_nombre": "ARS", "precio_fecha": "2026-04-01", "categoria_id": 4, "categoria_nombre": "Auriculares", "proveedor_id": 4, "proveedor_nombre": "DigitalStore", "proveedor_contacto": "ventas@digitalstore.com"},
+            {"id": 5, "nombre": "Notebook i5", "descripcion": "8GB RAM", "precio_valor": 900, "moneda_id": 2, "moneda_nombre": "USD", "precio_fecha": "2026-04-01", "categoria_id": 5, "categoria_nombre": "Notebooks", "proveedor_id": 5, "proveedor_nombre": "PC Mayorista", "proveedor_contacto": "mayorista@pc.com"},
+            {"id": 6, "nombre": "Ryzen 5", "descripcion": "Procesador AM4", "precio_valor": 250, "moneda_id": 2, "moneda_nombre": "USD", "precio_fecha": "2026-04-01", "categoria_id": 6, "categoria_nombre": "Procesadores", "proveedor_id": 6, "proveedor_nombre": "InsumosNet", "proveedor_contacto": "info@insumosnet.com"},
+            {"id": 7, "nombre": "RTX 4060", "descripcion": "8GB", "precio_valor": 450, "moneda_id": 2, "moneda_nombre": "USD", "precio_fecha": "2026-04-01", "categoria_id": 7, "categoria_nombre": "Placas de video", "proveedor_id": 7, "proveedor_nombre": "TecnoWorld", "proveedor_contacto": "ventas@tecnoworld.com"},
+            {"id": 8, "nombre": "RAM 16GB", "descripcion": "DDR4", "precio_valor": 70000, "moneda_id": 1, "moneda_nombre": "ARS", "precio_fecha": "2026-04-01", "categoria_id": 8, "categoria_nombre": "Memorias RAM", "proveedor_id": 8, "proveedor_nombre": "Hardware SA", "proveedor_contacto": "contacto@hardware.com"},
+            {"id": 9, "nombre": "SSD 1TB", "descripcion": "NVMe", "precio_valor": 120000, "moneda_id": 1, "moneda_nombre": "ARS", "precio_fecha": "2026-04-01", "categoria_id": 9, "categoria_nombre": "Discos SSD", "proveedor_id": 9, "proveedor_nombre": "ElectroParts", "proveedor_contacto": "ventas@electroparts.com"},
+            {"id": 10, "nombre": "Fuente 650W", "descripcion": "80 Plus Bronze", "precio_valor": 95000, "moneda_id": 1, "moneda_nombre": "ARS", "precio_fecha": "2026-04-01", "categoria_id": 10, "categoria_nombre": "Fuentes", "proveedor_id": 10, "proveedor_nombre": "MegaTech", "proveedor_contacto": "info@megatech.com"},
+        ],
+    )
+
+    escribir_csv(
+    "stock.csv",
+    ["id_producto", "producto_nombre", "producto_descripcion", "cantidad"],
+    [
+        {"id_producto": 1, "producto_nombre": "Monitor 24", "producto_descripcion": "Full HD", "cantidad": 15},
+        {"id_producto": 2, "producto_nombre": "Teclado Mecánico", "producto_descripcion": "Switch blue", "cantidad": 20},
+        {"id_producto": 3, "producto_nombre": "Mouse Gamer", "producto_descripcion": "RGB", "cantidad": 35},
+        {"id_producto": 4, "producto_nombre": "Auricular USB", "producto_descripcion": "Con micrófono", "cantidad": 18},
+        {"id_producto": 5, "producto_nombre": "Notebook i5", "producto_descripcion": "8GB RAM", "cantidad": 7},
+        {"id_producto": 6, "producto_nombre": "Ryzen 5", "producto_descripcion": "Procesador AM4", "cantidad": 12},
+        {"id_producto": 7, "producto_nombre": "RTX 4060", "producto_descripcion": "8GB", "cantidad": 5},
+        {"id_producto": 8, "producto_nombre": "RAM 16GB", "producto_descripcion": "DDR4", "cantidad": 40},
+        {"id_producto": 9, "producto_nombre": "SSD 1TB", "producto_descripcion": "NVMe", "cantidad": 22},
+        {"id_producto": 10, "producto_nombre": "Fuente 650W", "producto_descripcion": "80 Plus Bronze", "cantidad": 14},
+    ],
+)
+
+    escribir_csv(
+    "cotizacion.csv",
+    ["valor", "fecha", "id_tipo", "nombre_tipo"],
+    [
+        {"valor": 980, "fecha": "2026-04-01", "id_tipo": 1, "nombre_tipo": "Dólar Oficial"},
+        {"valor": 1020, "fecha": "2026-04-01", "id_tipo": 2, "nombre_tipo": "Dólar Blue"},
+        {"valor": 1005, "fecha": "2026-04-02", "id_tipo": 3, "nombre_tipo": "Dólar Bolsa"},
+        {"valor": 1015, "fecha": "2026-04-02", "id_tipo": 4, "nombre_tipo": "Dólar CCL"},
+        {"valor": 1100, "fecha": "2026-04-03", "id_tipo": 5, "nombre_tipo": "Dólar Tarjeta"},
+        {"valor": 975, "fecha": "2026-04-03", "id_tipo": 6, "nombre_tipo": "Dólar Mayorista"},
+        {"valor": 1030, "fecha": "2026-04-04", "id_tipo": 7, "nombre_tipo": "Dólar Cripto"},
+        {"valor": 1010, "fecha": "2026-04-04", "id_tipo": 8, "nombre_tipo": "Dólar MEP"},
+        {"valor": 1080, "fecha": "2026-04-05", "id_tipo": 9, "nombre_tipo": "Dólar Ahorro"},
+        {"valor": 1150, "fecha": "2026-04-05", "id_tipo": 10, "nombre_tipo": "Dólar Qatar"},
+    ],
+)
+
+    print("Datos precargados correctamente.")
+
