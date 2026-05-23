@@ -1,25 +1,125 @@
-# Sistema de Gestión de Inventarios
+# Price Manager - Sprint 2
 
 ## Objetivo
 
-El objetivo del proyecto es desarrollar un sistema de gestión de inventarios utilizando Python, aplicando programación orientada a objetos,
-persistencia de datos en archivos CSV, repositorios, servicios y una interfaz por consola.
-El sistema permite gestionar la información mediante operaciones CRUD y conservar los datos en archivos CSV.
+El objetivo principal del proyecto es aplicar los conocimientos
+adquiridos sobre:
 
-## Funcionalidades
+- Programación Orientada a Objetos
+- Persistencia de datos
+- SQLAlchemy ORM
+- Bases de datos relacionales
+- Consumo de APIs externas
+- Arquitectura modular
+- Control de versiones con Git y GitHub
 
-- Gestión de categorías.
-- Gestión de proveedores.
-- Gestión de monedas.
-- Gestión de tipos de cotización.
-- Gestión de productos.
-- Gestión de stock.
-- Gestión de cotización del dólar.
-- Precarga de datos iniciales.
-- Interfaz de usuario por consola.
+---
 
-# Integrantes
+## Introducción
 
-- Alves Ventura, Matias
-- Merino, Agostina
-- Monzalvo, Benjamin
+La empresa necesita un sistema moderno para la gestión de inventario 
+de productos electrónicos.
+
+El sistema permite administrar:
+
+- Productos
+- Categorías
+- Proveedores
+- Stock
+- Monedas
+- Cotizaciones del dólar
+- Historial de precios
+
+Además permite:
+
+- Persistencia en SQLite mediante SQLAlchemy
+- Migración de datos desde CSV
+- Consulta de cotizaciones desde API externa
+- Exportación de información a CSV
+- Gestión mediante interfaz de consola (CLI)
+- Consulta de precios en ARS y USD
+
+---
+
+## Tecnologías utilizadas
+
+- Python 3
+- SQLAlchemy
+- SQLite
+- Requests
+- dotenv
+- Git
+- GitHub
+- Google Colab
+
+---
+
+## Estructura del proyecto
+
+src/price_manager/
+
+├── database/
+
+├── entities/
+
+├── migrations/
+
+├── models/
+
+├── repositories/
+
+├── services/
+
+└── ui/
+
+---
+
+## Sprint actual
+
+Sprint 2
+
+---
+
+## Funcionalidades implementadas
+
+### CRUD completo
+- Categorías
+- Proveedores
+- Monedas
+- Tipos de cotización
+- Productos
+- Stock
+- Cotizaciones
+
+### Persistencia
+- Base de datos SQLite
+- ORM SQLAlchemy
+- Migraciones SQL
+- Migración inicial desde archivos CSV
+
+### API externa
+- Consulta automática de cotizaciones del dólar
+
+### Exportaciones
+- Exportación de productos a CSV
+
+### Consola
+- Menú interactivo CLI
+
+### Funcionalidades adicionales
+- Lista de precios bimonetaria ARS/USD
+- Historial de precios
+- Validaciones de negocio
+- Integración modular por capas
+
+---
+
+## Consideraciones
+
+Para simplificar el alcance del Sprint 2 y mantener su compatibilidad
+con el Sprint 1, el sistema modela un único stock por producto,
+sin considerar la posibilidad de existencia de múltiples almacenes físicos.
+
+Además, los precios históricos se implementan mediante una tabla
+relacional específica, permitiendo conservar registros anteriores
+de cotización de productos.
