@@ -7,7 +7,7 @@ adquiridos sobre:
 
 - Programación Orientada a Objetos
 - Persistencia de datos
-- SQLAlchemy ORM
+- SQLAlchemy 
 - Bases de datos relacionales
 - Consumo de APIs externas
 - Arquitectura modular
@@ -92,10 +92,9 @@ Sprint 2
 - Cotizaciones
 
 ### Persistencia
-- Base de datos SQLite
-- ORM SQLAlchemy
+- SQLite
+- SQLAlchemy Core mediante sentencias SQL
 - Migraciones SQL
-- Migración inicial desde archivos CSV
 
 ### API externa
 - Consulta automática de cotizaciones del dólar
