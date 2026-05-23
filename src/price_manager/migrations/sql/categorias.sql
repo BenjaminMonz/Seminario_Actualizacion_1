@@ -1,0 +1,10 @@
+INSERT INTO Categoria (Id, Nombre) VALUES ('1', 'Monitores');
+INSERT INTO Categoria (Id, Nombre) VALUES ('2', 'Periféricos');
+INSERT INTO Categoria (Id, Nombre) VALUES ('3', 'Notebooks');
+INSERT INTO Categoria (Id, Nombre) VALUES ('4', 'Procesadores');
+INSERT INTO Categoria (Id, Nombre) VALUES ('5', 'Placas de video');
+INSERT INTO Categoria (Id, Nombre) VALUES ('6', 'Memorias');
+INSERT INTO Categoria (Id, Nombre) VALUES ('7', 'Almacenamiento');
+INSERT INTO Categoria (Id, Nombre) VALUES ('8', 'Fuentes');
+INSERT INTO Categoria (Id, Nombre) VALUES ('9', 'Gabinetes');
+INSERT INTO Categoria (Id, Nombre) VALUES ('10', 'Redes');

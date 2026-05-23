@@ -1,0 +1,5 @@
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('1', 'Monitor 24', 'Monitor LED 24 pulgadas', '150000', '1', '1', '1');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('2', 'Teclado Mecánico', 'Teclado mecánico RGB', '85000', '1', '2', '2');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('3', 'Mouse Gamer', 'Mouse gamer 7200 DPI', '45000', '1', '2', '2');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('4', 'Notebook i5', 'Notebook Intel i5 16GB RAM', '900', '2', '3', '5');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('5', 'RTX 4060', 'Placa de video NVIDIA RTX 4060', '450', '2', '5', '6');
