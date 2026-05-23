@@ -34,3 +34,16 @@ class ConexionDB:
       self.transaccion.commit()
 
     self.conexion.close()
+
+try:
+
+  with ConexionDB() as cn:
+
+      print("Conexión iniciada.")
+
+      # Una vez creadas las tablas y sus funciones, se llaman acá pasando por parametro a cn.
+
+      raise ValueError("Hubo un error.")
+
+except Exception as e:
+  print(f"Error: {e}")
