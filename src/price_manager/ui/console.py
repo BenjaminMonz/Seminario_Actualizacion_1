@@ -487,10 +487,6 @@ def ejecutar_api_cotizaciones() -> None:
     )
 
 
-# Se valida que la moneda destino exista en la base de datos.
-# Esto evita mostrar precios con códigos inválidos ingresados
-# por error.
-
 def mostrar_lista_bimonetaria() -> None:
   """Muestra precios en ARS y USD usando cotización registrada."""
 
