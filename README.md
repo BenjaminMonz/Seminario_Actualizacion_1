@@ -7,7 +7,7 @@ adquiridos sobre:
 
 - Programación Orientada a Objetos
 - Persistencia de datos
-- SQLAlchemy 
+- SQLAlchemy
 - Bases de datos relacionales
 - Consumo de APIs externas
 - Arquitectura modular
@@ -17,7 +17,7 @@ adquiridos sobre:
 
 ## Introducción
 
-La empresa necesita un sistema moderno para la gestión de inventario 
+La empresa necesita un sistema moderno para la gestión de inventario
 de productos electrónicos.
 
 El sistema permite administrar:
