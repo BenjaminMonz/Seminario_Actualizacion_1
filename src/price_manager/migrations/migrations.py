@@ -18,6 +18,15 @@ CARPETA_SQL = (
 
 
 def guardar_sql(nombre_archivo: str, sentencias: list[str]) -> None:
+  """
+      Crea un archivo sql con un conjunto de sentencias en la ruta especificada.
+      Args:
+          nombre_archivo:
+              El nombre del archivo a crear.
+
+          sentencias:
+              Una lista con las sentencias a copiar.
+  """
   os.makedirs(CARPETA_SQL, exist_ok=True)
 
   ruta = os.path.join(CARPETA_SQL, nombre_archivo)
@@ -34,6 +43,18 @@ def formatear_valor(valor):
 
 
 def generar_insert_sql(tabla: str, columnas: list[str], valores: list) -> str:
+  """
+      Devuelve una cadena con el query para realizar una insercion.
+      Args:
+          tabla:
+              El nombre de la tabla.
+
+          columnas:
+              Una lista con los nombres de los campos.
+
+          valores:
+              Una lista con los valores a colocar en el insert.
+  """
   columnas_sql = ", ".join(columnas)
   valores_sql = ", ".join([formatear_valor(valor) for valor in valores])
 
@@ -41,6 +62,10 @@ def generar_insert_sql(tabla: str, columnas: list[str], valores: list) -> str:
 
 
 def migrar_datos() -> None:
+  """
+      Utilizando la conexion, ejecuta las sentencias necesarias para migrar los
+      datos a SQL.
+  """
 
   with ConexionDB() as cn:
 
