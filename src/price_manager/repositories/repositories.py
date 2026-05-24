@@ -19,6 +19,15 @@ from price_manager.entities.entities import (
 class RepositorioCategoria:
 
   def crear(self, categoria: Categoria) -> Categoria:
+    """
+      Ejcuta un query de insercion.
+      Args:
+          categoria:
+              Objeto de tipo Categoria a insertar.
+
+      Retorna:
+              Categoría insertada.
+    """
     with ConexionDB() as cn:
       cn.execute(
         text(
@@ -36,6 +45,13 @@ class RepositorioCategoria:
     return categoria
 
   def leer_por_id(self, id: int) -> Optional[Categoria]:
+    """
+      Busca en tabla algún registro asociado al id dado.
+
+      Args:
+          id: entero que representa el id de la categoria a buscar.
+
+    """
     with ConexionDB() as cn:
       fila = cn.execute(
         text(
@@ -54,6 +70,12 @@ class RepositorioCategoria:
     return Categoria(fila["Id"], fila["Nombre"])
 
   def leer_todos(self) -> List[Categoria]:
+    """
+      Ejcuta un query de seleccion.
+
+      Retorna:
+              Lista de Categorías existentes.
+    """
     with ConexionDB() as cn:
       filas = cn.execute(
         text(
@@ -70,6 +92,15 @@ class RepositorioCategoria:
     ]
 
   def actualizar(self, categoria: Categoria) -> Categoria:
+    """
+      Ejcuta un query de actualización.
+      Args:
+          categoria:
+              Objeto de tipo Categoria a actualizar.
+
+      Retorna:
+              Categoría actualizada.
+    """
     with ConexionDB() as cn:
       resultado = cn.execute(
         text(
@@ -91,6 +122,13 @@ class RepositorioCategoria:
     return categoria
 
   def eliminar(self, id: int) -> bool:
+    """
+      Ejcuta un query de eliminación / baja física.
+      Args:
+          id:entero que representa categoría a eliminar.
+      Retorna:
+              Booleano que indica si hubo filas afectadas o no.
+    """
     with ConexionDB() as cn:
       resultado = cn.execute(
         text(
@@ -652,12 +690,15 @@ class RepositorioCotizacionDolar:
 
     return cotizacion
 
-  def leer_por_tipo_y_fecha(
-    self,
-    tipo_id: int,
-    fecha: datetime.date,
-  ) -> Optional[CotizacionDolar]:
-
+  def leer_por_tipo_y_fecha(self,tipo_id: int,fecha: datetime.date,) -> Optional[CotizacionDolar]:
+    """
+      Ejcuta un query de seleccion de cotizacion por fecha y tipo cotizacion.
+      Args:
+          tipo_id:
+              entero que representa id de tipo cotizacion.
+          fecha:
+              fecha de tipo date.
+    """
     with ConexionDB() as cn:
       fila = cn.execute(
         text(
@@ -694,10 +735,15 @@ class RepositorioCotizacionDolar:
       tipo,
     )
 
-  def leer_historico_por_tipo(
-    self,
-    tipo_id: int,
-  ) -> List[CotizacionDolar]:
+  def leer_historico_por_tipo(self,tipo_id: int,) -> List[CotizacionDolar]:
+    """
+      Ejcuta un query de seleccion de cotizacion por tipo cotizacion.
+      Args:
+          tipo_id:
+              entero que representa id de tipo cotizacion.
+      Retorna:
+              Lista de cotizaciones.
+    """
     with ConexionDB() as cn:
       filas = cn.execute(
         text(
