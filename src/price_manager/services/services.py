@@ -169,6 +169,7 @@ class ServicioStock:
     producto = self.producto_servicio.obtener(producto_id)
     stock_actual = self.repositorio.leer_por_producto(producto_id)
 
+    # Si el producto aún no posee registro de stock, el movimiento crea el stock inicial
     if stock_actual is None:
       nuevo_stock = cantidad
     else:
@@ -299,6 +300,7 @@ class ServicioCotizacionDolar:
     fecha = datetime.date.today()
 
     for item in datos:
+      # Obtener de la API el nombre del tipo de dólar
       nombre_tipo = item.get("nombre", item.get("casa", "Sin nombre"))
       valor = item.get("venta", item.get("compra"))
 
