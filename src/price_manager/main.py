@@ -17,6 +17,7 @@ def inicializar_base_datos() -> None:
 def main(import_default_data: bool = False) -> None:
   """Ejecuta el sistema."""
 
+  # Inicializar la base únicamente cuando se quiere importar datos de ejemplo
   if import_default_data:
     inicializar_base_datos()
 
