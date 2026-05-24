@@ -109,7 +109,8 @@ def mostrar_titulo() -> None:
   print("Sistema de Gestión de Inventarios")
   print("=" * 45)
 
-
+# Cada repositorio encapsula el acceso a datos
+# de una entidad específica dentro de SQLite.
 repo_categoria = RepositorioCategoria()
 repo_proveedor = RepositorioProveedor()
 repo_moneda = RepositorioMoneda()
@@ -507,6 +508,7 @@ def mostrar_lista_bimonetaria() -> None:
       "Moneda inválida. Para esta opción solo se permite ARS o USD."
     )
 
+  # Se utiliza el tipo de cotización con ID 1 correspondiente al dólar
   historico = srv_cotizacion.obtener_historico(1)
 
   if len(historico) == 0:
