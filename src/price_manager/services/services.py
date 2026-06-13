@@ -1,377 +1,383 @@
-
-import abc
-from typing import TypeVar, Generic, List, Optional
-from price_manager.repositories.repositories import (
-    RepositorioCategoria, RepositorioProveedor, RepositorioMoneda,
-    RepositorioTipoCotizacion, RepositorioProducto, RepositorioStock,
-    RepositorioCotizacionDolar,
-)
 import datetime
+import os
+from typing import List, Optional
+
+import requests
+from dotenv import load_dotenv
+
 from price_manager.entities.entities import (
-    Categoria, Proveedor, Moneda, TipoCotizacion, Precio, Producto, CotizacionDolar, Stock
+  Categoria,
+  CotizacionDolar,
+  Moneda,
+  Producto,
+  Proveedor,
+  Stock,
+  TipoCotizacion,
+)
+from price_manager.repositories.repositories import (
+  RepositorioCategoria,
+  RepositorioCotizacionDolar,
+  RepositorioMoneda,
+  RepositorioProducto,
+  RepositorioProveedor,
+  RepositorioStock,
+  RepositorioTipoCotizacion,
 )
 
-### PROVEEDORES
-class ServicioProveedor:
-    def __init__(self, proveedor_repo: RepositorioProveedor):
-        self.proveedor_repo = proveedor_repo
 
-    def crear(self, proveedor: Proveedor) -> Proveedor:
-        return self.proveedor_repo.crear(proveedor)
+load_dotenv("/content/price_manager/.env")
 
-    def obtener(self, id: int) -> Optional[Proveedor]:
-        proveedor = self.proveedor_repo.leer_por_id(id)
 
-        if proveedor is None:
-          raise ValueError("No existe el proveedor.")
+class ServicioBase:
+  """Servicio base para operaciones CRUD comunes."""
 
-        return proveedor
+  def __init__(self, repositorio):
+    self.repositorio = repositorio
 
-    def listar_todos(self) -> List[Proveedor]:
-        return self.proveedor_repo.leer_todos()
+  def crear(self, entidad):
+    """
+      Crea una entidad utilizando el repositorio asociado.
 
-    def actualizar(self, proveedor: Proveedor) -> Proveedor:
-        return self.proveedor_repo.actualizar(proveedor)
+      Args:
+          entidad:
+              Objeto a persistir.
 
-    def eliminar(self, id: int) -> bool:
-        eliminado = self.proveedor_repo.eliminar(id)
+      Retorna:
+              Entidad creada.
+    """
+    return self.repositorio.crear(entidad)
 
-        if not eliminado:
-            raise ValueError("No existe el proveedor ingresado.")
+  def obtener(self, id: int):
+    """
+      Obtiene una entidad por su identificador.
 
-        return True
+      Args:
+          id:
+              Identificador de la entidad.
 
-# --------------------------
-### CATEGORIAS
+      Retorna:
+              Entidad encontrada.
 
-class ServicioCategoria:
-    def __init__(self, categoria_repo: RepositorioCategoria):
-        self.categoria_repo = categoria_repo
+      Raises:
+              ValueError si la entidad no existe.
+    """
+    entidad = self.repositorio.leer_por_id(id)
 
-    def crear(self, categoria: Categoria) -> Categoria:
-        return self.categoria_repo.crear(categoria)
+    if entidad is None:
+      raise ValueError("No existe una entidad con ese ID.")
 
-    def obtener(self, id: int) -> Optional[Categoria]:
-        categoria = self.categoria_repo.leer_por_id(id)
+    return entidad
 
-        if categoria is None:
-          raise ValueError("No existe la categoria.")
+  def listar_todos(self) -> List:
+    """
+      Recupera todas las entidades almacenadas.
 
-        return categoria
+      Retorna:
+              Lista de entidades.
+    """
+    return self.repositorio.leer_todos()
 
-    def listar_todos(self) -> List[Categoria]:
-        return self.categoria_repo.leer_todos()
+  def actualizar(self, entidad):
+    """
+      Actualiza una entidad utilizando el repositorio asociado.
 
-    def actualizar(self, categoria: Categoria) -> Categoria:
-        return self.categoria_repo.actualizar(categoria)
+      Args:
+          entidad:
+              Entidad con los datos modificados.
 
-    def eliminar(self, id: int) -> bool:
-        eliminado = self.categoria_repo.eliminar(id)
+      Retorna:
+              Entidad actualizada.
+    """
+    return self.repositorio.actualizar(entidad)
 
-        if not eliminado:
-          raise ValueError("No existe la categoria.")
+  def eliminar(self, id: int) -> bool:
+    """
+      Elimina una entidad por su identificador.
 
-        return True
+      Args:
+          id:
+              Identificador de la entidad.
 
-# --------------------------
-### MONEDAS
+      Retorna:
+              True si la eliminación fue exitosa.
 
-class ServicioMoneda:
-    def __init__(self, moneda_repo: RepositorioMoneda):
-        self.moneda_repo = moneda_repo
+      Raises:
+              ValueError si la entidad no existe.
+    """
+    eliminado = self.repositorio.eliminar(id)
 
-    def crear(self, moneda: Moneda) -> Moneda:
-        return self.moneda_repo.crear(moneda)
+    if not eliminado:
+      raise ValueError("No existe una entidad con ese ID.")
 
-    def obtener(self, id: int) -> Optional[Moneda]:
-        moneda = self.moneda_repo.leer_por_id(id)
+    return True
 
-        if moneda is None:
-          raise ValueError("No existe la moneda ingresada.")
 
-        return moneda
+class ServicioCategoria(ServicioBase):
+  """Servicio para la gestión de categorías."""
 
-    def listar_todos(self) -> List[Moneda]:
-        return self.moneda_repo.leer_todos()
+  def __init__(self, repositorio: RepositorioCategoria):
+    super().__init__(repositorio)
 
-    def actualizar(self, moneda: Moneda) -> Moneda:
-        return self.moneda_repo.actualizar(moneda)
 
-    def eliminar(self, id: int) -> bool:
-        eliminado = self.moneda_repo.eliminar(id)
+class ServicioProveedor(ServicioBase):
+  """Servicio para la gestión de proveedores."""
 
-        if not eliminado:
-          raise ValueError("No existe la moneda ingresada.")
+  def __init__(self, repositorio: RepositorioProveedor):
+    super().__init__(repositorio)
 
-        return True
 
-#-------------------------------------
-### TIPO COTIZACION
+class ServicioMoneda(ServicioBase):
+  """Servicio para la gestión de monedas."""
 
-class ServicioTipoCotizacion:
-    def __init__(self, tipo_repo: RepositorioTipoCotizacion):
-        self.tipo_repo = tipo_repo
+  def __init__(self, repositorio: RepositorioMoneda):
+    super().__init__(repositorio)
 
-    def crear(self, tipo: TipoCotizacion) -> TipoCotizacion:
-        return self.tipo_repo.crear(tipo)
 
-    def obtener(self, id: int) -> Optional[TipoCotizacion]:
-        tipo = self.tipo_repo.leer_por_id(id)
+class ServicioTipoCotizacion(ServicioBase):
+  """Servicio para la gestión de tipos de cotización."""
 
-        if tipo is None:
-          raise ValueError("No existe el tipo de cotización.")
+  def __init__(self, repositorio: RepositorioTipoCotizacion):
+    super().__init__(repositorio)
 
-        return tipo
 
-    def listar_todos(self) -> List[TipoCotizacion]:
-        return self.tipo_repo.leer_todos()
+class ServicioProducto(ServicioBase):
+  """Servicio para la gestión de productos."""
 
-    def actualizar(self, tipo: TipoCotizacion) -> TipoCotizacion:
-        return self.tipo_repo.actualizar(tipo)
+  def __init__(
+    self,
+    repositorio: RepositorioProducto,
+    categoria_servicio: ServicioCategoria,
+    proveedor_servicio: ServicioProveedor,
+  ):
+    super().__init__(repositorio)
+    self.categoria_servicio = categoria_servicio
+    self.proveedor_servicio = proveedor_servicio
 
-    def eliminar(self, id: int) -> bool:
-        eliminado = self.tipo_repo.eliminar(id)
+  def crear(self, producto: Producto) -> Producto:
+    self.categoria_servicio.obtener(producto.categoria.id)
+    self.proveedor_servicio.obtener(producto.proveedor.id)
 
-        if not eliminado:
-          raise ValueError("No existe el tipo de cotizacion ingresado.")
+    return self.repositorio.crear(producto)
 
-        return True
+  def actualizar(self, producto: Producto) -> Producto:
+    self.categoria_servicio.obtener(producto.categoria.id)
+    self.proveedor_servicio.obtener(producto.proveedor.id)
 
-#--------------------------------------
-### PRODUCTO
+    return self.repositorio.actualizar(producto)
 
-class ServicioProducto:
-    def __init__(
-        self,
-        producto_repo: RepositorioProducto,
-        categoria_servicio: ServicioCategoria,
-        proveedor_servicio: ServicioProveedor
-    ):
-        self.producto_repositorio = producto_repo
-        self.categoria_servicio = categoria_servicio
-        self.proveedor_servicio = proveedor_servicio
-
-    def crear(self,producto: Producto) -> Producto:
-        proveedor = self.proveedor_servicio.obtener(producto.proveedor.id)
-        if proveedor is None:
-            raise ValueError("El proveedor ingresado no existe.")
-
-        categoria = self.categoria_servicio.obtener(producto.categoria.id)
-        if categoria is None:
-            raise ValueError("La categoría ingresada no existe.")
-
-        return self.producto_repositorio.crear(producto)
-
-    def obtener(self, id: int) -> Optional[Producto]:
-        producto = self.producto_repositorio.leer_por_id(id)
-
-        if producto is None:
-          raise ValueError("No existe el producto.")
-
-        return producto
-
-    def listar_todos(self) -> List[Producto]:
-        return self.producto_repositorio.leer_todos()
-
-    def actualizar(self,producto: Producto) -> Producto:
-        proveedor = self.proveedor_servicio.obtener(producto.proveedor.id)
-        if proveedor is None:
-            raise ValueError("El proveedor ingresado no existe.")
-
-        categoria = self.categoria_servicio.obtener(producto.categoria.id)
-        if categoria is None:
-            raise ValueError("La categoría ingresada no existe.")
-
-        return self.producto_repositorio.actualizar(producto)
-
-    def eliminar(self, id: int) -> bool:
-        eliminado = self.producto_repositorio.eliminar(id)
-
-        if not eliminado:
-          raise ValueError("No existe el producto.")
-
-        return True
-
-# ----------------------------------
-### STOCK
 
 class ServicioStock:
-    def __init__(
-        self,
-        stock_repo: RepositorioStock,
-        producto_servicio: ServicioProducto
-    ):
-        self.stock_repo = stock_repo
-        self.producto_servicio = producto_servicio
+  """Servicio para la gestión del stock de productos."""
 
-    def crear(self, stock: Stock) -> Stock:
-        producto = self.producto_servicio.obtener(stock.producto.id)
+  def __init__(
+    self,
+    repositorio: RepositorioStock,
+    producto_servicio: ServicioProducto,
+  ):
+    self.repositorio = repositorio
+    self.producto_servicio = producto_servicio
 
-        if producto is None:
-            raise ValueError("El producto no existe.")
+  def crear(self, stock: Stock) -> Stock:
+    self.producto_servicio.obtener(stock.producto.id)
 
-        if stock.cantidad < 0:
-            raise ValueError("La cantidad no puede ser negativa.")
+    if stock.cantidad < 0:
+      raise ValueError("La cantidad de stock no puede ser negativa.")
 
-        return self.stock_repo.crear(stock)
+    return self.repositorio.crear(stock)
 
-    def actualizar(self, stock: Stock) -> Stock:
-        producto = self.producto_servicio.obtener(stock.producto_id)
+  def leer_por_producto(self, producto_id: int) -> Optional[Stock]:
+    return self.repositorio.leer_por_producto(producto_id)
 
-        if producto is None:
-            raise ValueError("El producto no existe.")
+  def actualizar(self, stock: Stock) -> Stock:
+    self.producto_servicio.obtener(stock.producto.id)
 
-        if stock.cantidad < 0:
-            raise ValueError("La cantidad no puede ser negativa.")
+    if stock.cantidad < 0:
+      raise ValueError("La cantidad de stock no puede ser negativa.")
 
-        return self.stock_repo.actualizar(stock)
+    return self.repositorio.actualizar(stock)
 
-    def leer_por_producto(self, producto_id: int) -> Optional[Stock]:
-        return self.stock_repo.leer_por_producto(producto_id)
+  def eliminar(self, producto_id: int) -> bool:
+    eliminado = self.repositorio.eliminar(producto_id)
 
-    def eliminar(self, producto_id: int) -> bool:
-        return self.stock_repo.eliminar(producto_id)
+    if not eliminado:
+      raise ValueError("No existe stock para ese producto.")
 
-    def obtener_stock(self, producto_id: int) -> int:
-        """Obtiene el stock de un producto.
+    return True
 
-        Args:
-            producto_id (int): el id del producto a consultar stock.
+  def obtener_stock(self, producto_id: int) -> int:
+    self.producto_servicio.obtener(producto_id)
+    stock = self.repositorio.leer_por_producto(producto_id)
 
-        Returns:
-            un entero con el stock correspondiente.
-        """
-        stock = self.stock_repo.leer_por_producto(producto_id)
+    if stock is None:
+      return 0
 
-        if stock is None:
-            return 0
+    return stock.cantidad
 
-        return stock.cantidad
+  def registrar_movimiento(
+    self,
+    producto_id: int,
+    cantidad: int,
+  ) -> int:
+    producto = self.producto_servicio.obtener(producto_id)
+    stock_actual = self.repositorio.leer_por_producto(producto_id)
 
-    def registrar_movimiento(self, producto_id: int, cantidad: int) -> int:
-        """Registra un movimiento de stock para un producto.
+    if stock_actual is None:
+      nuevo_stock = cantidad
+    else:
+      nuevo_stock = stock_actual.cantidad + cantidad
 
-        Args:
-            producto_id (int): el id del producto a registrar movimiento.
-            cantidad (int): cantidad a registrar.
-        Returns:
-            un entero con el stock actualizado.
+    if nuevo_stock < 0:
+      raise ValueError("No se permite stock negativo.")
 
-        Raises:
-            Producto inexsistente, Stock negativo.
-        """
-        producto = self.producto_servicio.obtener(producto_id)
+    stock = Stock(producto=producto, cantidad=nuevo_stock)
 
-        if producto is None:
-          raise ValueError("El producto no existe.")
+    if stock_actual is None:
+      self.repositorio.crear(stock)
+    else:
+      self.repositorio.actualizar(stock)
 
-        stock_actual = self.obtener_stock(producto_id)
-        nuevo_stock = stock_actual + cantidad
+    return nuevo_stock
 
-        if nuevo_stock < 0:
-            raise ValueError("No se permite stock negativo.")
-
-        stock_existente = self.stock_repo.leer_por_producto(producto_id)
-
-        nuevo_stock_obj = Stock(producto, nuevo_stock)
-
-        if stock_existente is None:
-            self.stock_repo.crear(nuevo_stock_obj)
-        else:
-            self.stock_repo.actualizar(nuevo_stock_obj)
-
-        return nuevo_stock
-
-# --------------------------------------
-### COTIZACION DOLAR
 
 class ServicioCotizacionDolar:
-    def __init__(
-        self,
-        cotizacion_repo: RepositorioCotizacionDolar,
-        tipo_servicio: ServicioTipoCotizacion
-    ):
-        self.cotizacion_repo = cotizacion_repo
-        self.tipo_servicio = tipo_servicio
+  """Servicio para la gestión de cotizaciones del dólar."""
 
-    def crear(
-        self,
-        cotizacion: CotizacionDolar
-    ) -> CotizacionDolar:
+  def __init__(
+    self,
+    repositorio: RepositorioCotizacionDolar,
+    tipo_servicio: ServicioTipoCotizacion,
+  ):
+    self.repositorio = repositorio
+    self.tipo_servicio = tipo_servicio
 
-        tipo = self.tipo_servicio.obtener(cotizacion.tipo.id)
+  def crear(self, cotizacion: CotizacionDolar) -> CotizacionDolar:
+    self.tipo_servicio.obtener(cotizacion.tipo.id)
 
-        if tipo is None:
-            raise ValueError("El tipo de cotización no existe.")
+    if cotizacion.valor <= 0:
+      raise ValueError("La cotización debe ser positiva.")
 
-        if cotizacion.valor <= 0:
-            raise ValueError("El valor debe ser mayor a 0.")
+    return self.repositorio.crear(cotizacion)
 
-        cotizacion = CotizacionDolar(cotizacion.valor, cotizacion.fecha, tipo)
+  def registrar_cotizacion(
+    self,
+    cotizacion: CotizacionDolar,
+  ) -> CotizacionDolar:
+    return self.crear(cotizacion)
 
-        return self.cotizacion_repo.crear(cotizacion)
+  def obtener(
+    self,
+    tipo_id: int,
+    fecha: datetime.date,
+  ) -> CotizacionDolar:
+    cotizacion = self.repositorio.leer_por_tipo_y_fecha(tipo_id, fecha)
 
-    def leer(self, tipo_id: int, fecha: datetime.date) -> Optional[CotizacionDolar]:
-        return self.cotizacion_repo.leer_por_tipo_y_fecha(tipo_id, fecha)
+    if cotizacion is None:
+      raise ValueError("No existe cotización para ese tipo y fecha.")
 
-    def leer_historico(self, tipo_id: int) -> List[CotizacionDolar]:
-        """Lee historico de registros de cotizaciones para un tipo de cot.
+    return cotizacion
 
-        Args:
-            tipo_id (int): el id del tipo a consultar historico.
+  def leer(
+    self,
+    tipo_id: int,
+    fecha: datetime.date,
+  ) -> Optional[CotizacionDolar]:
+    return self.repositorio.leer_por_tipo_y_fecha(tipo_id, fecha)
 
-        Returns:
-            Lista de cotizaciones.
-        """
-        return self.cotizacion_repo.leer_historico_por_tipo(tipo_id)
+  def obtener_historico(
+    self,
+    tipo_id: int,
+  ) -> List[CotizacionDolar]:
+    self.tipo_servicio.obtener(tipo_id)
+    return self.repositorio.leer_historico_por_tipo(tipo_id)
 
-    def actualizar(self,cotizacion: CotizacionDolar) -> CotizacionDolar:
-        tipo = self.tipo_servicio.obtener(cotizacion.tipo.id)
+  def leer_historico(
+    self,
+    tipo_id: int,
+  ) -> List[CotizacionDolar]:
+    return self.obtener_historico(tipo_id)
 
-        if tipo is None:
-            raise ValueError("El tipo de cotización no existe.")
+  def actualizar(
+    self,
+    cotizacion: CotizacionDolar,
+  ) -> CotizacionDolar:
+    self.tipo_servicio.obtener(cotizacion.tipo.id)
 
-        return self.cotizacion_repo.actualizar(cotizacion)
+    if cotizacion.valor <= 0:
+      raise ValueError("La cotización debe ser positiva.")
 
-    def eliminar(self, tipo_id: int, fecha: datetime.date) -> bool:
-        eliminado = self.cotizacion_repo.eliminar(tipo_id, fecha)
+    return self.repositorio.actualizar(cotizacion)
 
-        if not eliminado:
-            raise ValueError("No existe cotización para ese tipo y fecha.")
+  def eliminar(
+    self,
+    tipo_id: int,
+    fecha: datetime.date,
+  ) -> bool:
+    eliminado = self.repositorio.eliminar(tipo_id, fecha)
 
-        return True
+    if not eliminado:
+      raise ValueError("No existe cotización para ese tipo y fecha.")
 
-    def registrar_cotizacion(self, cotizacion: CotizacionDolar) -> CotizacionDolar:
-        """Registra una cotizacion.
+    return True
 
-        Args:
-            cotizacion (CotizacionDolar): objeto de tipo CotizacionDolar.
+  def _obtener_tipo_por_nombre(
+    self,
+    nombre: str,
+  ) -> TipoCotizacion:
+    tipos = self.tipo_servicio.listar_todos()
 
-        Returns:
-            La cotizacion creada.
+    for tipo in tipos:
+      if tipo.nombre.lower() == nombre.lower():
+        return tipo
 
-        Raises:
-            Tipo de cotizacion inexistente.
-        """
-        tipo = self.tipo_servicio.obtener(cotizacion.tipo.id)
+    nuevo_id = max([tipo.id for tipo in tipos], default=0) + 1
+    nuevo_tipo = TipoCotizacion(nuevo_id, nombre)
+    self.tipo_servicio.crear(nuevo_tipo)
 
-        if tipo is None:
-            raise ValueError("El tipo de cotización no existe.")
+    return nuevo_tipo
 
-        return self.cotizacion_repo.crear(cotizacion)
+  def obtener_cotizaciones(self) -> List[CotizacionDolar]:
+    """
+    Obtiene las cotizaciones desde la API configurada
+    y las registra en la base de datos.
 
-    def obtener_historico(self, tipo_id: int) -> List[CotizacionDolar]:
-        tipo = self.tipo_servicio.obtener(tipo_id)
+    Retorna:
+            Lista de cotizaciones obtenidas.
+    """
 
-        if tipo is None:
-            raise ValueError("El tipo de cotización no existe.")
+    api_url = os.getenv("API_URL")
 
-        return self.cotizacion_repo.leer_historico_por_tipo(tipo_id)
+    if api_url is None:
+      raise ValueError("No se encontró API_URL en el archivo .env.")
 
-    def obtener(self,tipo_id: int,fecha: datetime.date) -> CotizacionDolar:
-        cotizacion = self.cotizacion_repo.leer_por_tipo_y_fecha(tipo_id,fecha)
+    respuesta = requests.get(api_url, timeout=10)
+    respuesta.raise_for_status()
 
-        if cotizacion is None:
-            raise ValueError("No existe cotización para ese tipo y fecha.")
+    datos = respuesta.json()
+    cotizaciones = []
+    fecha = datetime.date.today()
 
-        return cotizacion
+    for item in datos:
+      nombre_tipo = item.get("nombre", item.get("casa", "Sin nombre"))
+      valor = item.get("venta", item.get("compra"))
+
+      if valor is None:
+        continue
+
+      tipo = self._obtener_tipo_por_nombre(nombre_tipo)
+
+      cotizacion = CotizacionDolar(
+        valor=float(valor),
+        fecha=fecha,
+        tipo=tipo,
+      )
+
+      existente = self.leer(tipo.id, fecha)
+
+      if existente is None:
+        self.registrar_cotizacion(cotizacion)
+      else:
+        self.actualizar(cotizacion)
+
+      cotizaciones.append(cotizacion)
+
+    return cotizaciones
