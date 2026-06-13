@@ -33,7 +33,8 @@ El sistema permite administrar:
 Además permite:
 
 - Persistencia en SQLite mediante SQLAlchemy
-- Migración de datos desde CSV
+- Migración de datos utilizando los CSV generados en Sprint 1
+- Generación automática de archivos SQL de inserción
 - Consulta de cotizaciones desde API externa
 - Exportación de información a CSV
 - Gestión mediante interfaz de consola (CLI)
@@ -50,27 +51,24 @@ Además permite:
 - dotenv
 - Git
 - GitHub
-- Google Colab
 
 ---
 
 ## Estructura del proyecto
 
-src/price_manager/
-
-├── database/
-
-├── entities/
-
-├── migrations/
-
-├── models/
-
-├── repositories/
-
-├── services/
-
-└── ui/
+price_manager/
+├── src/
+│   └── price_manager/
+│       ├── database/
+│       ├── entities/
+│       ├── migrations/
+│       ├── repositories/
+│       ├── services/
+│       ├── ui/
+│       └── main.py
+├── CHANGELOG.md
+├── README.md
+└── requirements.txt
 
 ---
 
@@ -95,6 +93,8 @@ Sprint 2
 - SQLite
 - SQLAlchemy Core mediante sentencias SQL
 - Migraciones SQL
+- Migración de datos desde archivos CSV
+- Generación de scripts SQL de inserción
 
 ### API externa
 - Consulta automática de cotizaciones del dólar
