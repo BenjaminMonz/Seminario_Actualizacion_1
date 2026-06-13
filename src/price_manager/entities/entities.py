@@ -1,92 +1,98 @@
 
+# Importaciones necesarias para el funcionamiento del módulo
+from __future__ import annotations
 import datetime
 
+# Definicion de clases
 
-class EntidadBase:
-  def __init__(self, id: int):
-    self.id = id
+# Clase Categoria: Representa una categoría de productos
+class Categoria():
 
-
-class Categoria(EntidadBase):
   def __init__(self, id: int, nombre: str):
-    super().__init__(id)
+    self.id = id
     self.nombre = nombre
 
-  def __str__(self) -> str:
-    return (
-      f"Categoria("
-      f"id={self.id}, "
-      f"nombre='{self.nombre}'"
-      f")"
-    )
+  def __str__(self):
+    return (f"ID: {self.id} - Nombre: {self.nombre}")
 
+# Clase Proveedor: Representa un proveedor de productos
+class Proveedor():
 
-class Proveedor(EntidadBase):
   def __init__(self, id: int, nombre: str, contacto: str):
-    super().__init__(id)
+    self.id = id
     self.nombre = nombre
     self.contacto = contacto
 
-  def __str__(self) -> str:
-    return (
-      f"Proveedor("
-      f"id={self.id}, "
-      f"nombre='{self.nombre}', "
-      f"contacto='{self.contacto}'"
-      f")"
-    )
+  def __str__(self):
+    return (f"ID: {self.id} - Nombre: {self.nombre} - Contacto {self.contacto}")
+# Clase Moneda: Representa un tipo de moneda
+class Moneda():
 
-
-class Moneda(EntidadBase):
   def __init__(self, id: int, nombre: str):
-    super().__init__(id)
+      self.id = id
+
+      # Validacion de cantidad de caracteres
+      if len(nombre) != 3 or not nombre.isalpha():
+        raise ValueError("La moneda debe contener exactamente 3 letras.")
+
+      self.nombre = nombre
+
+  def __str__(self):
+    return (f"ID: {self.id} - Nombre: {self.nombre}")
+
+# Clase TipoCotizacion: Representa el tipo de cotización del dólar
+class TipoCotizacion():
+
+  def __init__(self, id: int, nombre: str):
+    self.id = id
     self.nombre = nombre
 
-  def __str__(self) -> str:
-    return (
-      f"Moneda("
-      f"id={self.id}, "
-      f"nombre='{self.nombre}'"
-      f")"
-    )
+  def __str__(self):
+    return (f"ID: {self.id} - Nombre: {self.nombre}")
 
-class TipoCotizacion(EntidadBase):
-  def __init__(self, id: int, nombre: str):
-    super().__init__(id)
-    self.nombre = nombre
-
-  def __str__(self) -> str:
-    return (
-      f"TipoCotizacion("
-      f"id={self.id}, "
-      f"nombre='{self.nombre}'"
-      f")"
-    )
-
+# Clase Precio: Representa el precio de un producto. Incluye validación para evitar valores negativos
 class Precio:
+
   def __init__(
     self,
     valor: float,
     moneda: Moneda,
-    fecha: datetime.date,
+    fecha: datetime.date
   ):
+    # Validación de precio
     if valor < 0:
-      raise ValueError("El precio no puede ser negativo.")
+      raise ValueError("El precio del producto no puede ser negativo")
 
     self.valor = valor
     self.moneda = moneda
     self.fecha = fecha
 
-  def __str__(self) -> str:
-    return (
-      f"Precio("
-      f"valor={self.valor}, "
-      f"moneda='{self.moneda.nombre}', "
-      f"fecha='{self.fecha}'"
-      f")"
-    )
+  def __str__(self):
+    return f"Valor: {self.valor} - Moneda: {self.moneda.nombre} - Fecha: {self.fecha}"
 
-class Producto(EntidadBase):
+# Clase CotizacionDolar: Representa la cotización del dolar en una fecha y para un tipo de cambio específico
+class CotizacionDolar:
+
+  def __init__(
+    self,
+    valor: float,
+    fecha: datetime.date,
+    tipo: TipoCotizacion
+  ):
+    # Validación de cotización
+    if valor <= 0:
+      raise ValueError("La cotización debe ser positiva")
+
+    self.valor = valor
+    self.fecha = fecha
+    self.tipo = tipo
+
+  def __str__(self):
+    return f"Tipo: {self.tipo.nombre} - Valor: {self.valor} - Fecha: {self.fecha}"
+
+# Clase Producto: Representa un producto del sistema. Se considera la entidad central del negocio
+class Producto():
+
   def __init__(
     self,
     id: int,
@@ -94,63 +100,37 @@ class Producto(EntidadBase):
     descripcion: str,
     precio: Precio,
     categoria: Categoria,
-    proveedor: Proveedor,
+    proveedor: Proveedor
   ):
-    super().__init__(id)
+    self.id = id
+    # Atributos principales
     self.nombre = nombre
     self.descripcion = descripcion
+
+    # Relaciones con otras entidades
     self.precio = precio
     self.categoria = categoria
     self.proveedor = proveedor
 
-  def __str__(self) -> str:
+  def __str__(self):
     return (
-      f"Producto("
-      f"id={self.id}, "
-      f"nombre='{self.nombre}', "
-      f"precio={self.precio.valor} "
-      f"{self.precio.moneda.nombre}, "
-      f"categoria='{self.categoria.nombre}', "
-      f"proveedor='{self.proveedor.nombre}'"
-      f")"
+        f"ID: {self.id} - {self.nombre}\n"
+        f"Descripcion: {self.descripcion}\n"
+        f"Precio: {self.precio}\n"
+        f"Categoría: {self.categoria.nombre}\n"
+        f"Proveedor: {self.proveedor.nombre}\n"
     )
 
+# Clase Stock: Representa el stock con el que se cuenta de un producto. Se realiza validación para evitar numeros negativos
 class Stock:
+
   def __init__(self, producto: Producto, cantidad: int):
+    # Validación de stock
     if cantidad < 0:
-      raise ValueError("El stock no puede ser negativo.")
+      raise ValueError("El stock no puede ser negativo")
 
     self.producto = producto
     self.cantidad = cantidad
 
-
-  def __str__(self) -> str:
-    return (
-      f"Stock("
-      f"producto='{self.producto.nombre}', "
-      f"cantidad={self.cantidad}"
-      f")"
-    )
-
-class CotizacionDolar:
-  def __init__(
-    self,
-    valor: float,
-    fecha: datetime.date,
-    tipo: TipoCotizacion,
-  ):
-    if valor <= 0:
-      raise ValueError("La cotización debe ser positiva.")
-
-    self.valor = valor
-    self.fecha = fecha
-    self.tipo = tipo
-
-  def __str__(self) -> str:
-    return (
-      f"CotizacionDolar("
-      f"tipo='{self.tipo.nombre}', "
-      f"valor={self.valor}, "
-      f"fecha='{self.fecha}'"
-      f")"
-    )
+  def __str__(self):
+    return f"Producto: {self.producto.nombre} | Stock: {self.cantidad}"

@@ -1,28 +1,13 @@
 
-from price_manager.models.models import crear_tablas
-from price_manager.migrations.migrations import migrar_datos
-from price_manager.ui.console import main as ejecutar_menu
+from price_manager.ui.console import main as menu_main
+# Si el parametro se envia verdadero, se realizar la precarga
+def main(import_default_data: bool = False):
+    if import_default_data:
+        from price_manager.preload_data.preload_data import precargar_datos
+        precargar_datos()
 
-
-desactivar_git_push = False
-
-
-def inicializar_base_datos() -> None:
-  """Inicializa tablas y datos base."""
-
-  crear_tablas()
-  migrar_datos()
-
-
-def main(import_default_data: bool = False) -> None:
-  """Ejecuta el sistema."""
-
-  # Inicializar la base únicamente cuando se quiere importar datos de ejemplo
-  if import_default_data:
-    inicializar_base_datos()
-
-  ejecutar_menu()
+    menu_main()
 
 
 if __name__ == "__main__":
-  main(import_default_data=False)
+    main()
