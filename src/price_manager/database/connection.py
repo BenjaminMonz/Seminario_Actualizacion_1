@@ -65,14 +65,3 @@ class ConexionDB:
       self.transaccion.commit()
 
     self.conexion.close()
-
-try:
-
-  with ConexionDB() as cn:
-
-      print("Conexión iniciada.")
-
-      raise ValueError("Hubo un error.")
-
-except Exception as e:
-  print(f"Error: {e}")
