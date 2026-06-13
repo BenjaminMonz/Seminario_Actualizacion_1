@@ -53,3 +53,13 @@ Cambios por día.
 - Configuración de .gitignore.
 - Corrección general de errores.
 - Preparación final para entrega.
+
+## Día 14 - 13/06/2026
+- Corrección de observaciones recibidas en la devolución.
+- Eliminación de estructuras duplicadas dentro del repositorio.
+- Reutilización de archivos CSV generados en Sprint 1 para la migración.
+- Generación de archivos SQL con registros completos para todas las entidades.
+- Revisión y normalización de comentarios y docstrings según estándares Python.
+- Actualización de README.md con la estructura final del proyecto.
+- Ajustes de consistencia entre Sprint 1 y Sprint 2.
+- Validación completa de ejecución del proyecto.
