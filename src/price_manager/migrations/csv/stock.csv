@@ -1,6 +1,11 @@
-id_producto,cantidad
-1,15
-2,20
-3,30
-4,8
-5,10
+producto_id,producto_nombre,producto_descripcion,cantidad
+1,Monitor 24,Monitor Full HD,15
+2,Teclado Mecánico,Teclado switch blue,20
+3,Mouse Gamer,Mouse RGB,35
+4,Auricular USB,Auricular con micrófono,18
+5,Notebook i5,Notebook 8GB RAM,7
+6,Ryzen 5,Procesador AM4,12
+7,RTX 4060,Placa de video 8GB,5
+8,RAM 16GB,Memoria DDR4,40
+9,SSD 1TB,Disco NVMe,22
+10,Fuente 650W,80 Plus Bronze,14

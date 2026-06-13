@@ -1,11 +1,11 @@
 id,nombre,contacto
-1,Tech Import,ventas@techimport.com
-2,Hard Group,info@hardgroup.com
-3,Compu Mayorista,contacto@compumayorista.com
-4,Distribuidora PC,ventas@dpc.com
-5,Notebook Center,notebooks@center.com
-6,Gaming Parts,gaming@parts.com
-7,Storage Pro,ventas@storagepro.com
-8,Power Supply SA,contacto@power.com
-9,Redes del Sur,info@redessur.com
-10,Hardware Total,ventas@hardwaretotal.com
+1,TechCorp,ventas@techcorp.com
+2,HardPlus,info@hardplus.com
+3,CompuMax,contacto@compumax.com
+4,DigitalStore,ventas@digital.com
+5,PC Mayorista,mayorista@pc.com
+6,InsumosNet,info@insumosnet.com
+7,TecnoWorld,ventas@tecnoworld.com
+8,Hardware SA,contacto@hardware.com
+9,ElectroParts,ventas@eparts.com
+10,MegaTech,info@megatech.com

@@ -1,5 +1,10 @@
-INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('1', 'Monitor 24', 'Monitor LED 24 pulgadas', '150000', '1', '1', '1');
-INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('2', 'Teclado Mecánico', 'Teclado mecánico RGB', '85000', '1', '2', '2');
-INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('3', 'Mouse Gamer', 'Mouse gamer 7200 DPI', '45000', '1', '2', '2');
-INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('4', 'Notebook i5', 'Notebook Intel i5 16GB RAM', '900', '2', '3', '5');
-INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('5', 'RTX 4060', 'Placa de video NVIDIA RTX 4060', '450', '2', '5', '6');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('1', 'Monitor 24', 'Monitor Full HD', '150000', '1', '1', '1');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('2', 'Teclado Mecánico', 'Teclado switch blue', '85000', '1', '2', '2');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('3', 'Mouse Gamer', 'Mouse RGB', '45000', '1', '3', '3');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('4', 'Auricular USB', 'Auricular con micrófono', '60000', '1', '4', '4');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('5', 'Notebook i5', 'Notebook 8GB RAM', '900', '2', '5', '5');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('6', 'Ryzen 5', 'Procesador AM4', '250', '2', '6', '6');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('7', 'RTX 4060', 'Placa de video 8GB', '450', '2', '7', '7');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('8', 'RAM 16GB', 'Memoria DDR4', '70000', '1', '8', '8');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('9', 'SSD 1TB', 'Disco NVMe', '120000', '1', '9', '9');
+INSERT INTO Producto (Id, Nombre, Descripcion, Precio, Id_Moneda, Id_Categoria, Id_Proveedor) VALUES ('10', 'Fuente 650W', '80 Plus Bronze', '95000', '1', '10', '10');

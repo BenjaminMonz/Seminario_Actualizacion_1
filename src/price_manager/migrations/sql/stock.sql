@@ -1,5 +1,10 @@
 INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('1', '15');
 INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('2', '20');
-INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('3', '30');
-INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('4', '8');
-INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('5', '10');
+INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('3', '35');
+INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('4', '18');
+INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('5', '7');
+INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('6', '12');
+INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('7', '5');
+INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('8', '40');
+INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('9', '22');
+INSERT INTO Stock (Id_Producto, Cantidad) VALUES ('10', '14');

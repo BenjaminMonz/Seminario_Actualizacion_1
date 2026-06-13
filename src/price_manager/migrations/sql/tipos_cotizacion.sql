@@ -1,0 +1,10 @@
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('1', 'Oficial');
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('2', 'Blue');
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('3', 'Bolsa');
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('4', 'CCL');
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('5', 'Cripto');
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('6', 'Tarjeta');
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('7', 'Mayorista');
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('8', 'MEP');
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('9', 'Ahorro');
+INSERT INTO Tipo_Cotizacion (Id, Nombre) VALUES ('10', 'Turista');

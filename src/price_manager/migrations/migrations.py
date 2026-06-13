@@ -1,5 +1,6 @@
 import csv
 import os
+from typing import Any
 
 from sqlalchemy import text
 
@@ -18,15 +19,7 @@ CARPETA_SQL = (
 
 
 def guardar_sql(nombre_archivo: str, sentencias: list[str]) -> None:
-  """
-      Crea un archivo sql con un conjunto de sentencias en la ruta especificada.
-      Args:
-          nombre_archivo:
-              El nombre del archivo a crear.
-
-          sentencias:
-              Una lista con las sentencias a copiar.
-  """
+  """Guarda sentencias SQL en la carpeta de migraciones."""
   os.makedirs(CARPETA_SQL, exist_ok=True)
 
   ruta = os.path.join(CARPETA_SQL, nombre_archivo)
@@ -35,384 +28,347 @@ def guardar_sql(nombre_archivo: str, sentencias: list[str]) -> None:
     archivo.write("\n".join(sentencias))
 
 
-def formatear_valor(valor):
+def formatear_valor(valor: Any) -> str:
+  """Convierte valores de Python a formato válido para SQL."""
   if isinstance(valor, str):
-    return f"'{valor}'"
+    valor_limpio = valor.replace("'", "''")
+    return f"'{valor_limpio}'"
 
   return str(valor)
 
 
-def generar_insert_sql(tabla: str, columnas: list[str], valores: list) -> str:
-  """
-      Devuelve una cadena con el query para realizar una insercion.
-      Args:
-          tabla:
-              El nombre de la tabla.
-
-          columnas:
-              Una lista con los nombres de los campos.
-
-          valores:
-              Una lista con los valores a colocar en el insert.
-  """
+def generar_insert_sql(
+  tabla: str,
+  columnas: list[str],
+  valores: list[Any],
+) -> str:
+  """Genera una sentencia INSERT para registrar la migración."""
   columnas_sql = ", ".join(columnas)
-  valores_sql = ", ".join([formatear_valor(valor) for valor in valores])
+  valores_sql = ", ".join([
+    formatear_valor(valor)
+    for valor in valores
+  ])
 
-  return f"INSERT INTO {tabla} ({columnas_sql}) VALUES ({valores_sql});"
+  return (
+    f"INSERT INTO {tabla} "
+    f"({columnas_sql}) VALUES ({valores_sql});"
+  )
+
+
+def leer_csv(nombre_archivo: str) -> list[dict]:
+  """Lee un archivo CSV proveniente del Sprint 1."""
+  ruta = os.path.join(CARPETA_CSV, nombre_archivo)
+
+  with open(ruta, mode="r", encoding="utf-8") as archivo:
+    return list(csv.DictReader(archivo))
+
+
+def migrar_categorias(cn) -> None:
+  """Migra categorías desde CSV hacia SQLite."""
+  sentencias = []
+
+  for fila in leer_csv("categorias.csv"):
+    cn.execute(
+      text("""
+        INSERT INTO Categoria (Id, Nombre)
+        VALUES (:id, :nombre)
+      """),
+      {
+        "id": int(fila["id"]),
+        "nombre": fila["nombre"],
+      },
+    )
+
+    sentencias.append(
+      generar_insert_sql(
+        "Categoria",
+        ["Id", "Nombre"],
+        [fila["id"], fila["nombre"]],
+      )
+    )
+
+  guardar_sql("categorias.sql", sentencias)
+
+
+def migrar_proveedores(cn) -> None:
+  """Migra proveedores desde CSV hacia SQLite."""
+  sentencias = []
+
+  for fila in leer_csv("proveedores.csv"):
+    cn.execute(
+      text("""
+        INSERT INTO Proveedor (Id, Nombre, Contacto)
+        VALUES (:id, :nombre, :contacto)
+      """),
+      {
+        "id": int(fila["id"]),
+        "nombre": fila["nombre"],
+        "contacto": fila["contacto"],
+      },
+    )
+
+    sentencias.append(
+      generar_insert_sql(
+        "Proveedor",
+        ["Id", "Nombre", "Contacto"],
+        [fila["id"], fila["nombre"], fila["contacto"]],
+      )
+    )
+
+  guardar_sql("proveedores.sql", sentencias)
+
+
+def migrar_monedas(cn) -> None:
+  """Migra monedas desde CSV hacia SQLite."""
+  sentencias = []
+
+  for fila in leer_csv("monedas.csv"):
+    cn.execute(
+      text("""
+        INSERT INTO Moneda (Id, Nombre)
+        VALUES (:id, :nombre)
+      """),
+      {
+        "id": int(fila["id"]),
+        "nombre": fila["nombre"],
+      },
+    )
+
+    sentencias.append(
+      generar_insert_sql(
+        "Moneda",
+        ["Id", "Nombre"],
+        [fila["id"], fila["nombre"]],
+      )
+    )
+
+  guardar_sql("monedas.sql", sentencias)
+
+
+def migrar_tipos_cotizacion(cn) -> None:
+  """Migra tipos de cotización desde CSV hacia SQLite."""
+  sentencias = []
+
+  for fila in leer_csv("tipos_cotizacion.csv"):
+    cn.execute(
+      text("""
+        INSERT INTO Tipo_Cotizacion (Id, Nombre)
+        VALUES (:id, :nombre)
+      """),
+      {
+        "id": int(fila["id"]),
+        "nombre": fila["nombre"],
+      },
+    )
+
+    sentencias.append(
+      generar_insert_sql(
+        "Tipo_Cotizacion",
+        ["Id", "Nombre"],
+        [fila["id"], fila["nombre"]],
+      )
+    )
+
+  guardar_sql("tipos_cotizacion.sql", sentencias)
+
+
+def migrar_productos(cn) -> None:
+  """Migra productos desde CSV hacia SQLite."""
+  sentencias = []
+
+  for fila in leer_csv("productos.csv"):
+    cn.execute(
+      text("""
+        INSERT INTO Producto
+        (
+          Id,
+          Nombre,
+          Descripcion,
+          Precio,
+          Id_Moneda,
+          Id_Categoria,
+          Id_Proveedor
+        )
+        VALUES
+        (
+          :id,
+          :nombre,
+          :descripcion,
+          :precio,
+          :id_moneda,
+          :id_categoria,
+          :id_proveedor
+        )
+      """),
+      {
+        "id": int(fila["id"]),
+        "nombre": fila["nombre"],
+        "descripcion": fila["descripcion"],
+        "precio": float(fila["precio_valor"]),
+        "id_moneda": int(fila["moneda_id"]),
+        "id_categoria": int(fila["categoria_id"]),
+        "id_proveedor": int(fila["proveedor_id"]),
+      },
+    )
+
+    sentencias.append(
+      generar_insert_sql(
+        "Producto",
+        [
+          "Id",
+          "Nombre",
+          "Descripcion",
+          "Precio",
+          "Id_Moneda",
+          "Id_Categoria",
+          "Id_Proveedor",
+        ],
+        [
+          fila["id"],
+          fila["nombre"],
+          fila["descripcion"],
+          fila["precio_valor"],
+          fila["moneda_id"],
+          fila["categoria_id"],
+          fila["proveedor_id"],
+        ],
+      )
+    )
+
+  guardar_sql("productos.sql", sentencias)
+
+
+def migrar_precio_historico(cn) -> None:
+  """Migra precios históricos usando los precios del Sprint 1."""
+  sentencias = []
+
+  for fila in leer_csv("productos.csv"):
+    cn.execute(
+      text("""
+        INSERT INTO Precio_Historico
+        (
+          Id_Precio,
+          Id_Producto,
+          Valor,
+          Fecha,
+          Id_Moneda
+        )
+        VALUES
+        (
+          :id_precio,
+          :id_producto,
+          :valor,
+          :fecha,
+          :id_moneda
+        )
+      """),
+      {
+        "id_precio": int(fila["id"]),
+        "id_producto": int(fila["id"]),
+        "valor": float(fila["precio_valor"]),
+        "fecha": fila["precio_fecha"],
+        "id_moneda": int(fila["moneda_id"]),
+      },
+    )
+
+    sentencias.append(
+      generar_insert_sql(
+        "Precio_Historico",
+        [
+          "Id_Precio",
+          "Id_Producto",
+          "Valor",
+          "Fecha",
+          "Id_Moneda",
+        ],
+        [
+          fila["id"],
+          fila["id"],
+          fila["precio_valor"],
+          fila["precio_fecha"],
+          fila["moneda_id"],
+        ],
+      )
+    )
+
+  guardar_sql("precio_historico.sql", sentencias)
+
+
+def migrar_stock(cn) -> None:
+  """Migra stock desde CSV hacia SQLite."""
+  sentencias = []
+
+  for fila in leer_csv("stock.csv"):
+    cn.execute(
+      text("""
+        INSERT INTO Stock (Id_Producto, Cantidad)
+        VALUES (:id_producto, :cantidad)
+      """),
+      {
+        "id_producto": int(fila["producto_id"]),
+        "cantidad": int(fila["cantidad"]),
+      },
+    )
+
+    sentencias.append(
+      generar_insert_sql(
+        "Stock",
+        ["Id_Producto", "Cantidad"],
+        [fila["producto_id"], fila["cantidad"]],
+      )
+    )
+
+  guardar_sql("stock.sql", sentencias)
+
+
+def migrar_cotizaciones(cn) -> None:
+  """Migra cotizaciones del dólar desde CSV hacia SQLite."""
+  sentencias = []
+
+  for fila in leer_csv("cotizaciones.csv"):
+    cn.execute(
+      text("""
+        INSERT INTO Cotizacion_Dolar
+        (
+          Valor,
+          Fecha,
+          Id_Tipo_Cotizacion
+        )
+        VALUES
+        (
+          :valor,
+          :fecha,
+          :id_tipo
+        )
+      """),
+      {
+        "valor": float(fila["valor"]),
+        "fecha": fila["fecha"],
+        "id_tipo": int(fila["tipo_id"]),
+      },
+    )
+
+    sentencias.append(
+      generar_insert_sql(
+        "Cotizacion_Dolar",
+        ["Valor", "Fecha", "Id_Tipo_Cotizacion"],
+        [fila["valor"], fila["fecha"], fila["tipo_id"]],
+      )
+    )
+
+  guardar_sql("cotizaciones.sql", sentencias)
 
 
 def migrar_datos() -> None:
-  """
-      Utilizando la conexion, ejecuta las sentencias necesarias para migrar los
-      datos a SQL.
-  """
-
+  """Ejecuta la migración completa desde CSV hacia SQLite."""
   with ConexionDB() as cn:
-
-    # =========================
-    # CATEGORIAS
-    # =========================
-    sentencias = []
-    ruta = os.path.join(CARPETA_CSV, "categorias.csv")
-
-    with open(ruta, mode="r", encoding="utf-8") as archivo:
-      reader = csv.DictReader(archivo)
-
-      for fila in reader:
-        cn.execute(
-          text(
-            """
-            INSERT INTO Categoria (Id, Nombre)
-            VALUES (:id, :nombre)
-            """
-          ),
-          {
-            "id": int(fila["id"]),
-            "nombre": fila["nombre"]
-          }
-        )
-
-        sentencias.append(
-          generar_insert_sql(
-            "Categoria",
-            ["Id", "Nombre"],
-            [fila["id"], fila["nombre"]]
-          )
-        )
-
-    guardar_sql("categorias.sql", sentencias)
-
-    # =========================
-    # PROVEEDORES
-    # =========================
-    sentencias = []
-    ruta = os.path.join(CARPETA_CSV, "proveedores.csv")
-
-    with open(ruta, mode="r", encoding="utf-8") as archivo:
-      reader = csv.DictReader(archivo)
-
-      for fila in reader:
-        cn.execute(
-          text(
-            """
-            INSERT INTO Proveedor (Id, Nombre, Contacto)
-            VALUES (:id, :nombre, :contacto)
-            """
-          ),
-          {
-            "id": int(fila["id"]),
-            "nombre": fila["nombre"],
-            "contacto": fila["contacto"]
-          }
-        )
-
-        sentencias.append(
-          generar_insert_sql(
-            "Proveedor",
-            ["Id", "Nombre", "Contacto"],
-            [fila["id"], fila["nombre"], fila["contacto"]]
-          )
-        )
-
-    guardar_sql("proveedores.sql", sentencias)
-
-    # =========================
-    # MONEDAS
-    # =========================
-    sentencias = []
-    ruta = os.path.join(CARPETA_CSV, "monedas.csv")
-
-    with open(ruta, mode="r", encoding="utf-8") as archivo:
-      reader = csv.DictReader(archivo)
-
-      for fila in reader:
-        cn.execute(
-          text(
-            """
-            INSERT INTO Moneda (Id, Nombre)
-            VALUES (:id, :nombre)
-            """
-          ),
-          {
-            "id": int(fila["id"]),
-            "nombre": fila["nombre"]
-          }
-        )
-
-        sentencias.append(
-          generar_insert_sql(
-            "Moneda",
-            ["Id", "Nombre"],
-            [fila["id"], fila["nombre"]]
-          )
-        )
-
-    guardar_sql("monedas.sql", sentencias)
-
-    # =========================
-    # TIPOS COTIZACION
-    # =========================
-    sentencias = []
-    ruta = os.path.join(CARPETA_CSV, "tiposCotizacion.csv")
-
-    with open(ruta, mode="r", encoding="utf-8") as archivo:
-      reader = csv.DictReader(archivo)
-
-      for fila in reader:
-        cn.execute(
-          text(
-            """
-            INSERT INTO Tipo_Cotizacion (Id, Nombre)
-            VALUES (:id, :nombre)
-            """
-          ),
-          {
-            "id": int(fila["id"]),
-            "nombre": fila["nombre"]
-          }
-        )
-
-        sentencias.append(
-          generar_insert_sql(
-            "Tipo_Cotizacion",
-            ["Id", "Nombre"],
-            [fila["id"], fila["nombre"]]
-          )
-        )
-
-    guardar_sql("tiposCotizacion.sql", sentencias)
-
-    # =========================
-    # PRODUCTOS
-    # =========================
-    sentencias_producto = []
-
-    ruta = os.path.join(CARPETA_CSV, "productos.csv")
-
-    with open(ruta, mode="r", encoding="utf-8") as archivo:
-      reader = csv.DictReader(archivo)
-
-      for fila in reader:
-
-        cn.execute(
-          text(
-            """
-            INSERT INTO Producto
-            (
-              Id,
-              Nombre,
-              Descripcion,
-              Precio,
-              Id_Moneda,
-              Id_Categoria,
-              Id_Proveedor
-            )
-            VALUES
-            (
-              :id,
-              :nombre,
-              :descripcion,
-              :precio,
-              :id_moneda,
-              :id_categoria,
-              :id_proveedor
-            )
-            """
-          ),
-          {
-            "id": int(fila["id"]),
-            "nombre": fila["nombre"],
-            "descripcion": fila["descripcion"],
-            "precio": fila["precio"],
-            "id_moneda": int(fila["id_moneda"]),
-            "id_categoria": int(fila["categoria_id"]),
-            "id_proveedor": int(fila["proveedor_id"])
-          }
-        )
-
-        sentencias_producto.append(
-          generar_insert_sql(
-            "Producto",
-            [
-              "Id",
-              "Nombre",
-              "Descripcion",
-              "Precio",
-              "Id_Moneda",
-              "Id_Categoria",
-              "Id_Proveedor"
-            ],
-            [
-              fila["id"],
-              fila["nombre"],
-              fila["descripcion"],
-              fila["precio"],
-              fila["id_moneda"],
-              fila["categoria_id"],
-              fila["proveedor_id"]
-            ]
-          )
-        )
-
-    guardar_sql("productos.sql", sentencias_producto)
-
-    # =========================
-    # PRECIO HISTORICO
-    # =========================
-
-    sentencias = []
-
-    precios_historicos = [
-      [1, 1, 135000.0, "2025-10-01", 1],
-      [2, 1, 142000.0, "2025-11-01", 1],
-      [3, 2, 78000.0, "2025-10-01", 1],
-      [4, 2, 82000.0, "2025-11-01", 1],
-      [5, 5, 850.0, "2025-10-01", 2],
-      [6, 5, 880.0, "2025-11-01", 2],
-    ]
-
-    for precio in precios_historicos:
-      cn.execute(
-        text(
-          """
-          INSERT INTO Precio_Historico
-          (
-            Id_Precio,
-            Id_Producto,
-            Valor,
-            Fecha,
-            Id_Moneda
-          )
-          VALUES
-          (
-            :id_precio,
-            :id_producto,
-            :valor,
-            :fecha,
-            :id_moneda
-          )
-          """
-        ),
-        {
-          "id_precio": precio[0],
-          "id_producto": precio[1],
-          "valor": precio[2],
-          "fecha": precio[3],
-          "id_moneda": precio[4],
-        }
-      )
-
-      sentencias.append(
-        generar_insert_sql(
-          "Precio_Historico",
-          [
-            "Id_Precio",
-            "Id_Producto",
-            "Valor",
-            "Fecha",
-            "Id_Moneda",
-          ],
-          precio,
-        )
-      )
-
-    guardar_sql("precio_historico.sql", sentencias)
-
-    # =========================
-    # STOCK
-    # =========================
-    sentencias = []
-    ruta = os.path.join(CARPETA_CSV, "stock.csv")
-
-    with open(ruta, mode="r", encoding="utf-8") as archivo:
-      reader = csv.DictReader(archivo)
-
-      for fila in reader:
-        cn.execute(
-          text(
-            """
-            INSERT INTO Stock (Id_Producto, Cantidad)
-            VALUES (:id_producto, :cantidad)
-            """
-          ),
-          {
-            "id_producto": int(fila["id_producto"]),
-            "cantidad": int(fila["cantidad"])
-          }
-        )
-
-        sentencias.append(
-          generar_insert_sql(
-            "Stock",
-            ["Id_Producto", "Cantidad"],
-            [fila["id_producto"], fila["cantidad"]]
-          )
-        )
-
-    guardar_sql("stock.sql", sentencias)
-
-    # =========================
-    # COTIZACION DOLAR
-    # =========================
-    sentencias = []
-    ruta = os.path.join(CARPETA_CSV, "cotizacion.csv")
-
-    with open(ruta, mode="r", encoding="utf-8") as archivo:
-      reader = csv.DictReader(archivo)
-
-      for fila in reader:
-        cn.execute(
-          text(
-            """
-            INSERT INTO Cotizacion_Dolar
-            (
-              Valor,
-              Id_Tipo_Cotizacion,
-              Fecha
-            )
-            VALUES
-            (
-              :valor,
-              :id_tipo,
-              :fecha
-            )
-            """
-          ),
-          {
-            "valor": float(fila["valor"]),
-            "id_tipo": int(fila["id_tipo"]),
-            "fecha": fila["fecha"]
-          }
-        )
-
-        sentencias.append(
-          generar_insert_sql(
-            "Cotizacion_Dolar",
-            ["Valor", "Id_Tipo_Cotizacion", "Fecha"],
-            [fila["valor"], fila["id_tipo"], fila["fecha"]]
-          )
-        )
-
-    guardar_sql("cotizacion_dolar.sql", sentencias)
+    migrar_tipos_cotizacion(cn)
+    migrar_categorias(cn)
+    migrar_monedas(cn)
+    migrar_proveedores(cn)
+    migrar_productos(cn)
+    migrar_precio_historico(cn)
+    migrar_stock(cn)
+    migrar_cotizaciones(cn)
 
   print("Migración finalizada correctamente.")

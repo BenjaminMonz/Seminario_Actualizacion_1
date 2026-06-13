@@ -1,0 +1,10 @@
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('980', '2026-04-01', '1');
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('1020', '2026-04-01', '2');
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('1005', '2026-04-02', '3');
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('1015', '2026-04-02', '4');
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('1030', '2026-04-03', '5');
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('1100', '2026-04-03', '6');
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('975', '2026-04-04', '7');
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('1010', '2026-04-04', '8');
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('1080', '2026-04-05', '9');
+INSERT INTO Cotizacion_Dolar (Valor, Fecha, Id_Tipo_Cotizacion) VALUES ('1150', '2026-04-05', '10');

@@ -1,2 +1,10 @@
 INSERT INTO Moneda (Id, Nombre) VALUES ('1', 'ARS');
 INSERT INTO Moneda (Id, Nombre) VALUES ('2', 'USD');
+INSERT INTO Moneda (Id, Nombre) VALUES ('3', 'EUR');
+INSERT INTO Moneda (Id, Nombre) VALUES ('4', 'BRL');
+INSERT INTO Moneda (Id, Nombre) VALUES ('5', 'CLP');
+INSERT INTO Moneda (Id, Nombre) VALUES ('6', 'UYU');
+INSERT INTO Moneda (Id, Nombre) VALUES ('7', 'GBP');
+INSERT INTO Moneda (Id, Nombre) VALUES ('8', 'JPY');
+INSERT INTO Moneda (Id, Nombre) VALUES ('9', 'CNY');
+INSERT INTO Moneda (Id, Nombre) VALUES ('10', 'MXN');
