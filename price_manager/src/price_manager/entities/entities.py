@@ -1,57 +1,118 @@
 
-# Importaciones necesarias para el funcionamiento del módulo
+# Importaciones necesarias
 from __future__ import annotations
+
 import datetime
 
-# Definicion de clases
 
-# Clase Categoria: Representa una categoría de productos
-class Categoria():
+class EntidadBase:
+  """
+  Clase base para las entidades del sistema.
+  """
 
-  def __init__(self, id: int, nombre: str):
-    self.id = id
-    self.nombre = nombre
+  def __init__(self, id: int):
+    self.__id = id
 
-  def __str__(self):
-    return (f"ID: {self.id} - Nombre: {self.nombre}")
+  @property
+  def id(self) -> int:
+    return self.__id
 
-# Clase Proveedor: Representa un proveedor de productos
-class Proveedor():
+  @id.setter
+  def id(self, nuevo_id: int) -> None:
+    self.__id = nuevo_id
 
-  def __init__(self, id: int, nombre: str, contacto: str):
-    self.id = id
-    self.nombre = nombre
-    self.contacto = contacto
 
-  def __str__(self):
-    return (f"ID: {self.id} - Nombre: {self.nombre} - Contacto {self.contacto}")
-# Clase Moneda: Representa un tipo de moneda
-class Moneda():
+class Categoria(EntidadBase):
+  """
+  Representa una categoría de productos.
+  """
 
   def __init__(self, id: int, nombre: str):
-      self.id = id
+    super().__init__(id)
+    self.__nombre = nombre
 
-      # Validacion de cantidad de caracteres
-      if len(nombre) != 3 or not nombre.isalpha():
-        raise ValueError("La moneda debe contener exactamente 3 letras.")
+  @property
+  def nombre(self) -> str:
+    return self.__nombre
 
-      self.nombre = nombre
+  @nombre.setter
+  def nombre(self, nuevo_nombre: str) -> None:
+    self.__nombre = nuevo_nombre
 
-  def __str__(self):
-    return (f"ID: {self.id} - Nombre: {self.nombre}")
 
-# Clase TipoCotizacion: Representa el tipo de cotización del dólar
-class TipoCotizacion():
+class Proveedor(EntidadBase):
+  """
+  Representa un proveedor del sistema.
+  """
+
+  def __init__(
+    self,
+    id: int,
+    nombre: str,
+    contacto: str
+  ):
+    super().__init__(id)
+
+    self.__nombre = nombre
+    self.__contacto = contacto
+
+  @property
+  def nombre(self) -> str:
+    return self.__nombre
+
+  @nombre.setter
+  def nombre(self, nuevo_nombre: str) -> None:
+    self.__nombre = nuevo_nombre
+
+  @property
+  def contacto(self) -> str:
+    return self.__contacto
+
+  @contacto.setter
+  def contacto(self, nuevo_contacto: str) -> None:
+    self.__contacto = nuevo_contacto
+
+
+class Moneda(EntidadBase):
+  """
+  Representa una moneda del sistema.
+  """
 
   def __init__(self, id: int, nombre: str):
-    self.id = id
-    self.nombre = nombre
+    super().__init__(id)
+    self.__nombre = nombre
 
-  def __str__(self):
-    return (f"ID: {self.id} - Nombre: {self.nombre}")
+  @property
+  def nombre(self) -> str:
+    return self.__nombre
 
-# Clase Precio: Representa el precio de un producto. Incluye validación para evitar valores negativos
+  @nombre.setter
+  def nombre(self, nuevo_nombre: str) -> None:
+    self.__nombre = nuevo_nombre
+
+
+class TipoCotizacion(EntidadBase):
+  """
+  Representa un tipo de cotización.
+  """
+
+  def __init__(self, id: int, nombre: str):
+    super().__init__(id)
+    self.__nombre = nombre
+
+  @property
+  def nombre(self) -> str:
+    return self.__nombre
+
+  @nombre.setter
+  def nombre(self, nuevo_nombre: str) -> None:
+    self.__nombre = nuevo_nombre
+
+
 class Precio:
+  """
+  Representa el precio de un producto.
+  """
 
   def __init__(
     self,
@@ -59,19 +120,43 @@ class Precio:
     moneda: Moneda,
     fecha: datetime.date
   ):
-    # Validación de precio
+
     if valor < 0:
-      raise ValueError("El precio del producto no puede ser negativo")
+      raise ValueError(
+        "El valor del precio no puede ser negativo."
+      )
 
-    self.valor = valor
-    self.moneda = moneda
-    self.fecha = fecha
+    self.__valor = valor
+    self.__moneda = moneda
+    self.__fecha = fecha
 
-  def __str__(self):
-    return f"Valor: {self.valor} - Moneda: {self.moneda.nombre} - Fecha: {self.fecha}"
+  @property
+  def valor(self) -> float:
+    return self.__valor
 
-# Clase CotizacionDolar: Representa la cotización del dolar en una fecha y para un tipo de cambio específico
+  @valor.setter
+  def valor(self, nuevo_valor: float) -> None:
+
+    if nuevo_valor < 0:
+      raise ValueError(
+        "El valor del precio no puede ser negativo."
+      )
+
+    self.__valor = nuevo_valor
+
+  @property
+  def moneda(self) -> Moneda:
+    return self.__moneda
+
+  @property
+  def fecha(self) -> datetime.date:
+    return self.__fecha
+
+
 class CotizacionDolar:
+  """
+  Representa una cotización del dólar.
+  """
 
   def __init__(
     self,
@@ -79,19 +164,33 @@ class CotizacionDolar:
     fecha: datetime.date,
     tipo: TipoCotizacion
   ):
-    # Validación de cotización
+
     if valor <= 0:
-      raise ValueError("La cotización debe ser positiva")
+      raise ValueError(
+        "La cotización debe ser positiva."
+      )
 
-    self.valor = valor
-    self.fecha = fecha
-    self.tipo = tipo
+    self.__valor = valor
+    self.__fecha = fecha
+    self.__tipo = tipo
 
-  def __str__(self):
-    return f"Tipo: {self.tipo.nombre} - Valor: {self.valor} - Fecha: {self.fecha}"
+  @property
+  def valor(self) -> float:
+    return self.__valor
 
-# Clase Producto: Representa un producto del sistema. Se considera la entidad central del negocio
-class Producto():
+  @property
+  def fecha(self) -> datetime.date:
+    return self.__fecha
+
+  @property
+  def tipo(self) -> TipoCotizacion:
+    return self.__tipo
+
+
+class Producto(EntidadBase):
+  """
+  Representa un producto del sistema.
+  """
 
   def __init__(
     self,
@@ -102,35 +201,73 @@ class Producto():
     categoria: Categoria,
     proveedor: Proveedor
   ):
-    self.id = id
-    # Atributos principales
-    self.nombre = nombre
-    self.descripcion = descripcion
 
-    # Relaciones con otras entidades
-    self.precio = precio
-    self.categoria = categoria
-    self.proveedor = proveedor
+    super().__init__(id)
 
-  def __str__(self):
-    return (
-        f"ID: {self.id} - {self.nombre}\n"
-        f"Descripcion: {self.descripcion}\n"
-        f"Precio: {self.precio}\n"
-        f"Categoría: {self.categoria.nombre}\n"
-        f"Proveedor: {self.proveedor.nombre}\n"
-    )
+    self.__nombre = nombre
+    self.__descripcion = descripcion
+    self.__precio = precio
+    self.__categoria = categoria
+    self.__proveedor = proveedor
 
-# Clase Stock: Representa el stock con el que se cuenta de un producto. Se realiza validación para evitar numeros negativos
+  @property
+  def nombre(self) -> str:
+    return self.__nombre
+
+  @nombre.setter
+  def nombre(self, nuevo_nombre: str) -> None:
+    self.__nombre = nuevo_nombre
+
+  @property
+  def descripcion(self) -> str:
+    return self.__descripcion
+
+  @property
+  def precio(self) -> Precio:
+    return self.__precio
+
+  @property
+  def categoria(self) -> Categoria:
+    return self.__categoria
+
+  @property
+  def proveedor(self) -> Proveedor:
+    return self.__proveedor
+
+
 class Stock:
+  """
+  Representa el stock de un producto.
+  """
 
-  def __init__(self, producto: Producto, cantidad: int):
-    # Validación de stock
+  def __init__(
+    self,
+    producto: Producto,
+    cantidad: int
+  ):
+
     if cantidad < 0:
-      raise ValueError("El stock no puede ser negativo")
+      raise ValueError(
+        "La cantidad de stock no puede ser negativa."
+      )
 
-    self.producto = producto
-    self.cantidad = cantidad
+    self.__producto = producto
+    self.__cantidad = cantidad
 
-  def __str__(self):
-    return f"Producto: {self.producto.nombre} | Stock: {self.cantidad}"
+  @property
+  def producto(self) -> Producto:
+    return self.__producto
+
+  @property
+  def cantidad(self) -> int:
+    return self.__cantidad
+
+  @cantidad.setter
+  def cantidad(self, nueva_cantidad: int) -> None:
+
+    if nueva_cantidad < 0:
+      raise ValueError(
+        "La cantidad de stock no puede ser negativa."
+      )
+
+    self.__cantidad = nueva_cantidad

@@ -31,3 +31,12 @@ Cambios por dia.
 - Corrección de errores.
 - Validación completa del flujo.
 - Preparación final para la entrega.
+
+## Día 7 13/06/2026
+- Corrección de observaciones recibidas en la devolución del Sprint 1.
+- Implementación de encapsulación mediante propiedades y atributos privados.
+- Incorporación de validaciones adicionales para los datos ingresados por consola.
+- Mejora de comentarios y documentación según estándares de Python.
+- Inclusión de archivos CSV de migración dentro de la estructura del proyecto.
+- Verificación completa de ejecución mediante "Restart session and run all".
+- Actualización del repositorio con las correcciones solicitadas por la cátedra.

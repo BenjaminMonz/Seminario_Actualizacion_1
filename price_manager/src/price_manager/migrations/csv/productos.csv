@@ -1,0 +1,11 @@
+id,nombre,descripcion,precio_valor,moneda_id,moneda_nombre,precio_fecha,categoria_id,categoria_nombre,proveedor_id,proveedor_nombre,proveedor_contacto
+1,Monitor 24,Monitor Full HD,150000,1,ARS,2026-04-01,1,Monitores,1,TechCorp,ventas@techcorp.com
+2,Teclado Mecánico,Teclado switch blue,85000,1,ARS,2026-04-01,2,Teclados,2,HardPlus,info@hardplus.com
+3,Mouse Gamer,Mouse RGB,45000,1,ARS,2026-04-01,3,Mouse,3,CompuMax,contacto@compumax.com
+4,Auricular USB,Auricular con micrófono,60000,1,ARS,2026-04-01,4,Auriculares,4,DigitalStore,ventas@digital.com
+5,Notebook i5,Notebook 8GB RAM,900,2,USD,2026-04-01,5,Notebooks,5,PC Mayorista,mayorista@pc.com
+6,Ryzen 5,Procesador AM4,250,2,USD,2026-04-01,6,Procesadores,6,InsumosNet,info@insumosnet.com
+7,RTX 4060,Placa de video 8GB,450,2,USD,2026-04-01,7,Placas de video,7,TecnoWorld,ventas@tecnoworld.com
+8,RAM 16GB,Memoria DDR4,70000,1,ARS,2026-04-01,8,Memorias RAM,8,Hardware SA,contacto@hardware.com
+9,SSD 1TB,Disco NVMe,120000,1,ARS,2026-04-01,9,Discos SSD,9,ElectroParts,ventas@eparts.com
+10,Fuente 650W,80 Plus Bronze,95000,1,ARS,2026-04-01,10,Fuentes,10,MegaTech,info@megatech.com
