@@ -1,65 +1,49 @@
-
 # CHANGELOG
 
-Cambios por día.
+Registro de cambios realizados durante el desarrollo del proyecto.
 
-## Día 6 - 16/05/2026
-- Lectura y análisis de la consigna del Sprint 2.
-- Revisión del Sprint 1 como base de trabajo.
-- Configuración inicial del repositorio.
-- Creación de la rama Sprint_2.
-- Instalación y registro de dependencias.
+## Día 21 - 14/06/2026
+- Incorporación de nuevas opciones al menú principal.
+- Ejecución de scraping desde consola.
+- Generación de reportes desde consola.
+- Visualización de historial de auditoría.
+- Corrección de errores detectados durante las pruebas.
+- Actualización de README.md y CHANGELOG.md.
+- Validación final de funcionamiento del Sprint 3.
 
-## Día 7 - 17/05/2026
-- Creación de la clase ConexionDB.
-- Configuración de conexión a SQLite mediante SQLAlchemy.
-- Verificación inicial de conexión a la base de datos.
+## Día 20 - 13/06/2026
+- Implementación de tabla de auditoría.
+- Desarrollo de decorador para auditoría automática.
+- Registro de acción, fecha y detalles.
+- Integración de auditoría en scraping, alertas y reportes.
 
-## Día 8 - 18/05/2026
-- Implementación del context manager de transacciones.
-- Manejo de commit y rollback.
-- Validación de apertura y cierre de conexión.
+## Día 19 - 12/06/2026
+- Implementación del servicio de generación de reportes.
+- Exportación de reportes en formato Excel.
+- Inclusión de producto, precio interno, precio web, diferencia y fecha de extracción.
+- Validación de generación de archivos XLSX.
 
-## Día 9 - 19/05/2026
-- Creación manual de tablas relacionales.
-- Definición de claves primarias y foráneas.
-- Incorporación de la tabla Precio_Historico.
-- Validación de creación de estructura de base de datos.
+## Día 18 - 11/06/2026
+- Desarrollo del servicio de alertas de precios.
+- Comparación entre precios internos y precios obtenidos mediante scraping.
+- Generación de alertas de diferencias de precio.
+- Exportación de alertas a CSV.
 
-## Día 10 - 20/05/2026
-- Migración de datos desde archivos CSV hacia SQLite.
-- Generación de sentencias SQL de inserción.
-- Carga de datos iniciales.
-- Carga de precios históricos de productos.
+## Día 17 - 10/06/2026
+- Implementación del scraper StarComputacionSpider.
+- Implementación de Item Loaders.
+- Implementación de Pipelines.
+- Extracción de precios web.
+- Obtención de URL de imágenes.
+- Obtención de formas de pago.
+- Extracción de descripción detallada.
 
-## Día 11 - 21/05/2026
-- Implementación de entidades y repositorios.
-- Adaptación de operaciones CRUD a SQLite.
-- Integración con SQLAlchemy Core.
-- Validación general de categorías, proveedores, productos y stock.
+## Día 16 - 09/06/2026
+- Incorporación de carga de información desde archivos SQL.
+- Adaptación de estructura para persistencia de datos.
+- Validación de carga de registros en SQLite.
 
-## Día 12 - 22/05/2026
-- Implementación de capa de servicios.
-- Integración con API externa de cotizaciones.
-- Configuración de archivo .env.
-- Obtención y registro de cotizaciones del dólar.
-- Validación de errores en consultas externas.
-
-## Día 13 - 23/05/2026
-- Actualización del menú de consola.
-- Incorporación de lista bimonetaria ARS/USD.
-- Exportación de productos a CSV.
-- Actualización de README.md.
-- Configuración de .gitignore.
-- Corrección general de errores.
-- Preparación final para entrega.
-
-## Día 14 - 13/06/2026
-- Corrección de observaciones recibidas en la devolución.
-- Eliminación de estructuras duplicadas dentro del repositorio.
-- Reutilización de archivos CSV generados en Sprint 1 para la migración.
-- Generación de archivos SQL con registros completos para todas las entidades.
-- Revisión y normalización de comentarios y docstrings según estándares Python.
-- Actualización de README.md con la estructura final del proyecto.
-- Ajustes de consistencia entre Sprint 1 y Sprint 2.
-- Validación completa de ejecución del proyecto.
+## Día 15 - 08/06/2026
+- Preparación de la estructura inicial del Sprint 3.
+- Configuración de carpetas, dependencias y archivos base.
+- Revisión de requerimientos y planificación de implementación.
