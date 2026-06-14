@@ -98,7 +98,7 @@ class RepositorioCategoria:
   def actualizar(self, categoria: Categoria) -> Categoria:
     """
       Ejecuta un query de actualización.
-      
+
       Args:
           categoria:
               Objeto de tipo Categoria a actualizar.
@@ -985,11 +985,11 @@ class RepositorioCotizacionDolar:
   def leer_historico_por_tipo(self,tipo_id: int,) -> List[CotizacionDolar]:
     """
       Ejecuta un query de selección de cotizacion por tipo cotizacion.
-      
+
       Args:
           tipo_id:
               entero que representa id de tipo cotizacion.
-      
+
       Retorna:
               Lista de cotizaciones.
     """
