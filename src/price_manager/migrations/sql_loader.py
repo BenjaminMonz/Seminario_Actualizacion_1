@@ -3,6 +3,7 @@ import os
 from sqlalchemy import text
 
 from price_manager.database.connection import ConexionDB
+from price_manager.services.audit_service import auditar_operacion
 
 
 CARPETA_SQL = (
@@ -61,6 +62,7 @@ def cargar_sql(nombre_archivo: str) -> int:
   return len(sentencias)
 
 
+@auditar_operacion("CARGA_DATOS_SQL")
 def cargar_datos_desde_sql() -> dict[str, int]:
   """
   Ejecuta los archivos SQL de carga inicial en un orden seguro.

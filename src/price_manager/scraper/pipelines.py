@@ -1,6 +1,8 @@
 import csv
 import os
 
+from price_manager.services.audit_service import RepositorioAuditoria
+
 
 class StarComputacionPipeline:
   """Guarda los productos scrapeados en un archivo CSV."""
@@ -47,3 +49,11 @@ class StarComputacionPipeline:
       writer = csv.DictWriter(archivo, fieldnames=columnas)
       writer.writeheader()
       writer.writerows(self.items)
+
+    RepositorioAuditoria().registrar(
+      accion="EJECUCION_SCRAPER",
+      detalles=(
+        f"Archivo generado: {self.ruta_salida}; "
+        f"Registros obtenidos: {len(self.items)}"
+      ),
+    )

@@ -4,10 +4,13 @@ import os
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill
 
+from price_manager.services.audit_service import auditar_operacion
+
 
 class ServicioReportePrecios:
   """Servicio para generar reportes Excel de comparación de precios."""
 
+  @auditar_operacion("GENERACION_REPORTE_EXCEL")
   def generar_reporte_excel(
     self,
     ruta_alertas: str,

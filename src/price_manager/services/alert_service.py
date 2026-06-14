@@ -2,10 +2,13 @@ import csv
 import datetime
 import os
 
+from price_manager.services.audit_service import auditar_operacion
+
 
 class ServicioAlertasPrecio:
   """Servicio para generar alertas por diferencias de precios."""
 
+  @auditar_operacion("GENERACION_ALERTAS")
   def generar_alertas(
     self,
     ruta_scraper: str,
