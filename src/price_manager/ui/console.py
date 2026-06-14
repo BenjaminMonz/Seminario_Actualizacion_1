@@ -1,4 +1,5 @@
 import datetime
+import subprocess
 
 from IPython.display import clear_output
 
@@ -21,6 +22,9 @@ from price_manager.repositories.repositories import (
   RepositorioTipoCotizacion,
 )
 from price_manager.services.export_service import ServicioExportacion
+from price_manager.services.alert_service import ServicioAlertasPrecio
+from price_manager.reports.report_service import ServicioReportePrecios
+from price_manager.services.audit_service import RepositorioAuditoria
 from price_manager.services.services import (
   ServicioCategoria,
   ServicioCotizacionDolar,
@@ -162,11 +166,14 @@ def menu_entidades() -> str:
   print("8 - Obtener cotizaciones por API")
   print("9 - Ver lista de precios bimonetaria")
   print("10 - Exportar precios a CSV")
-  print("11 - Salir")
+  print("11 - Ejecutar scraping")
+  print("12 - Generar reporte")
+  print("13 - Ver historial de auditoría")
+  print("14 - Salir")
 
   return leer_opcion("\nSeleccione una opción: ", [
     "1", "2", "3", "4", "5", "6",
-    "7", "8", "9", "10", "11",
+    "7", "8", "9", "10", "11", "12", "13", "14",
   ])
 
 
@@ -588,6 +595,92 @@ def exportar_precios_csv() -> None:
   print(ruta_archivo)
 
 
+def ejecutar_scraping() -> None:
+  """Ejecuta el scraper de Star Computación."""
+
+  ruta_salida = (
+    "/content/price_manager/"
+    "exports/star_computacion.csv"
+  )
+
+  comando = [
+    "python",
+    "-m",
+    "scrapy",
+    "crawl",
+    "star_computacion",
+    "-a",
+    "limite=10",
+    "-a",
+    "resultados_por_busqueda=10",
+    "-a",
+    f"archivo_salida={ruta_salida}",
+  ]
+
+  subprocess.run(
+    comando,
+    cwd="/content/price_manager",
+    check=True,
+  )
+
+  print("Scraping ejecutado correctamente.")
+  print(ruta_salida)
+
+
+def generar_reporte() -> None:
+  """Genera alertas CSV y reporte Excel de precios."""
+
+  ruta_scraper = (
+    "/content/price_manager/"
+    "exports/star_computacion.csv"
+  )
+  ruta_alertas = (
+    "/content/price_manager/"
+    "exports/alertas_precios.csv"
+  )
+  ruta_reporte = (
+    "/content/price_manager/"
+    "exports/reporte_precios.xlsx"
+  )
+
+  diferencia_minima = leer_float(
+    "Ingrese diferencia mínima para generar alertas: "
+  )
+
+  alertas = ServicioAlertasPrecio().generar_alertas(
+    ruta_scraper=ruta_scraper,
+    ruta_alertas=ruta_alertas,
+    diferencia_minima=diferencia_minima,
+  )
+
+  ServicioReportePrecios().generar_reporte_excel(
+    ruta_alertas=ruta_alertas,
+    ruta_reporte=ruta_reporte,
+  )
+
+  print(f"Alertas generadas: {len(alertas)}")
+  print("Reporte generado correctamente.")
+  print(ruta_reporte)
+
+
+def ver_historial_auditoria() -> None:
+  """Muestra el historial de auditoría del sistema."""
+
+  auditorias = RepositorioAuditoria().listar_todos()
+
+  if len(auditorias) == 0:
+    print("No hay registros de auditoría.")
+    return
+
+  for auditoria in auditorias:
+    print(
+      f"{auditoria.id} | "
+      f"{auditoria.accion} | "
+      f"{auditoria.fecha} | "
+      f"{auditoria.detalles}"
+    )
+
+
 def main() -> None:
   """Ejecuta el menú principal del sistema."""
   while True:
@@ -600,7 +693,7 @@ def main() -> None:
     while True:
       opcion = menu_entidades()
 
-      if opcion == "11":
+      if opcion == "14":
         break
 
       if opcion == "1":
@@ -625,4 +718,13 @@ def main() -> None:
         pausar()
       elif opcion == "10":
         exportar_precios_csv()
+        pausar()
+      elif opcion == "11":
+        ejecutar_scraping()
+        pausar()
+      elif opcion == "12":
+        generar_reporte()
+        pausar()
+      elif opcion == "13":
+        ver_historial_auditoria()
         pausar()
