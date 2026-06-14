@@ -479,7 +479,19 @@ def ejecutar_api_cotizaciones() -> None:
   Ejecuta la obtención de cotizaciones desde la API
   y muestra los resultados obtenidos.
   """
-  cotizaciones = srv_cotizacion.obtener_cotizaciones()
+  try:
+    cotizaciones = srv_cotizacion.obtener_cotizaciones()
+
+  except ValueError as error:
+    print(f"Error de configuración: {error}")
+    print(
+      "Verifique que exista el archivo .env con la variable API_URL."
+    )
+    return
+
+  except requests.exceptions.RequestException as error:
+    print(f"Error al consultar la API: {error}")
+    return
 
   print("Cotizaciones obtenidas y registradas:")
 
